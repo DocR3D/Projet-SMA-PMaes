@@ -123,20 +123,20 @@ public class Environnement {
 	public void updateEnergyV2() {
 		for(String uneProposition : Agent.S()) {
 			for(Module unModule : Environnement.M(uneProposition)) {
-				System.out.println("L'environnement donne à " + unModule + " une valeur d'énergie égal à " + (energieInjecteePropositionVraiePHI* 1/Environnement.M(uneProposition).size() * 1/energieInjecteePropositionVraiePHI)*10);
-				unModule.setSeuilActivationALPHA(unModule.getSeuilActivationALPHA() + energieInjecteePropositionVraiePHI/Environnement.M(uneProposition).size());
+				System.out.println("L'environnement donne à " + unModule + " une valeur d'énergie égal à " + (energieInjecteePropositionVraiePHI* 1/Environnement.M(uneProposition).size() * 1/unModule.getSizeCondition()));
+				unModule.setSeuilActivationALPHA(unModule.getSeuilActivationALPHA() + (energieInjecteePropositionVraiePHI* 1/Environnement.M(uneProposition).size() * 1/unModule.getSizeCondition()));
 			}
 		}
 		for(String uneProposition : Agent.G()) {
 			for(Module unModule : Environnement.A(uneProposition)) {
-				System.out.println("Les buts donnent à " + unModule + " une valeur d'énergie égal à " + (energieInjecteeSousButGAMMA *1/Environnement.A(uneProposition).size() + 1/energieInjecteeSousButGAMMA));
-				unModule.setSeuilActivationALPHA(unModule.getSeuilActivationALPHA() + energieInjecteeSousButGAMMA/Environnement.A(uneProposition).size());
+				System.out.println("Les buts donnent à " + unModule + " une valeur d'énergie égal à " + (energieInjecteeSousButGAMMA *1/Environnement.A(uneProposition).size() + 1/unModule.getSizeAjoutes()));
+				unModule.setSeuilActivationALPHA(unModule.getSeuilActivationALPHA() + (energieInjecteeSousButGAMMA *1/Environnement.A(uneProposition).size() + 1/unModule.getSizeAjoutes()));
 			}
 		}
 		for(String uneProposition : Agent.R()) {
 			for(Module unModule : Environnement.U(uneProposition)) {
-				System.out.println("Les buts accomplit retirent à " + unModule + " une valeur d'énergie égal à " + (energiePriseButProtegeDELTA/Environnement.U(uneProposition).size() + 1/energiePriseButProtegeDELTA ));
-				unModule.setSeuilActivationALPHA(unModule.getSeuilActivationALPHA() - energiePriseButProtegeDELTA/Environnement.U(uneProposition).size());
+				System.out.println("Les buts accomplit retirent à " + unModule + " une valeur d'énergie égal à " + (energiePriseButProtegeDELTA/Environnement.U(uneProposition).size() + 1/unModule.getNumberTrueDetruits() ));
+				unModule.setSeuilActivationALPHA(unModule.getSeuilActivationALPHA() - (energiePriseButProtegeDELTA/Environnement.U(uneProposition).size() + 1/unModule.getNumberTrueDetruits()));
 			}
 		}
 		

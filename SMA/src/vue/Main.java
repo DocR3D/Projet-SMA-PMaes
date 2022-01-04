@@ -13,7 +13,7 @@ public class Main {
 		
 		//Module without conflicts, adds or deletes
 		Module hand_is_empty = new Module((float) 0,"hand_is_empty");
-		Module sander_somewhere = new Module((float) 5,"sander_somewhere");
+		Module sander_somewhere = new Module((float) 0,"sander_somewhere");
 		Module sprayer_somewhere = new Module((float) 0,"sprayer_somewhere");
 		Module operationnal = new Module((float) 0,"operationnal");
 		Module board_somewhere = new Module((float) 0,"board_somewhere");

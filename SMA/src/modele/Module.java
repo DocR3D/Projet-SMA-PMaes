@@ -43,12 +43,16 @@ public class Module {
 		//Change la valeur de toute les conditions pour tout les modules contenant la proposition
 		for(String uneProposition : this.ajoutes.keySet()) {
 			Environnement.A(uneProposition).forEach(m -> m.getConditions().put(uneProposition, true));
+			if(Agent.isInPropositionButs(uneProposition))
+				Agent.terminerBut(uneProposition);
 		}
 		
 		//Change la valeur de toute les conditions pour tout les modules contenant la proposition
 		for(String uneProposition : this.detruits.keySet()) {
 			if(Environnement.A(uneProposition) != null )Environnement.A(uneProposition).forEach(m -> m.getConditions().put(uneProposition, false));
 			if(Environnement.M(uneProposition) != null ) Environnement.M(uneProposition).forEach(m -> m.getConditions().put(uneProposition, false));
+			if(Agent.isInPropositionButs(uneProposition))
+				Agent.resetBut(uneProposition);
 
 		}
 			
@@ -125,15 +129,15 @@ public class Module {
 		return detruits;
 	}
 
-	public int getSizeCondition() {
+	public float getSizeCondition() {
 		return this.conditions.values().size();
 	}
 	
-	public int getSizeAjoutes() {
+	public float getSizeAjoutes() {
 		return this.ajoutes.values().size();
 	}
 	
-	public int getSizeDetruits() {
+	public float getSizeDetruits() {
 		return this.detruits.values().size();
 	}
 	

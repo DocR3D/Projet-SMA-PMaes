@@ -29,9 +29,27 @@ public class Agent {
 		return propositionButTerminees;
 	}
 	
-	//public static boolean isInPropositionButs(String) {
-		
-	//}
+	public static boolean isInPropositionButs(String uneProposition) {
+		return Agent.propositionButs.contains(uneProposition);
+	}
+	
+	public static boolean isInPropositionVraies(String uneProposition) {
+		return Agent.propositionButs.contains(uneProposition);
+	}
+	public static boolean isInPropositionButTerminees(String uneProposition) {
+		return Agent.propositionButTerminees.contains(uneProposition);
+	}
+	
+	public static void terminerBut(String uneProposition) {
+		propositionButs.remove(uneProposition);
+		propositionButTerminees.add(uneProposition);
+	}
+	
+	public static void resetBut(String uneProposition) {
+		propositionButs.add(uneProposition);
+		propositionButTerminees.remove(uneProposition);
+	}
+	
 	
 	public void addPropositionInitiale(String key) {
 			Agent.propositionVraies.add(key);
