@@ -105,13 +105,13 @@ public class Main {
 		
 		//D�but de la simulation
 		int time = 1;
-		while(time < 3) {
+		while(time < 2) {
 			System.out.println("TIME : " + time);
 			System.out.println(a.printState());
 			//Calcul des activations des modules
 			e.executable();
 			// Diffusion d'�nergie d'activation
-			e.updateEnergyV2();
+			e.updateEnergyStateGoalAndGoalDone();
 			//Si executable, Execution d'un module
 			Module executableModule = e.getModuleToExecute();
 			if(executableModule != null) {

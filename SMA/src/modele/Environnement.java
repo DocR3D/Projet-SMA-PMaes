@@ -120,7 +120,7 @@ public class Environnement {
 		}
 	}
 	
-	public void updateEnergyV2() {
+	public void updateEnergyStateGoalAndGoalDone() {
 		for(String uneProposition : Agent.S()) {
 			for(Module unModule : Environnement.M(uneProposition)) {
 				System.out.println("L'environnement donne à " + unModule + " une valeur d'énergie égal à " + (energieInjecteePropositionVraiePHI* 1/Environnement.M(uneProposition).size() * 1/unModule.getSizeCondition()));
@@ -129,8 +129,8 @@ public class Environnement {
 		}
 		for(String uneProposition : Agent.G()) {
 			for(Module unModule : Environnement.A(uneProposition)) {
-				System.out.println("Les buts donnent à " + unModule + " une valeur d'énergie égal à " + (energieInjecteeSousButGAMMA *1/Environnement.A(uneProposition).size() + 1/unModule.getSizeAjoutes()));
-				unModule.setSeuilActivationALPHA(unModule.getSeuilActivationALPHA() + (energieInjecteeSousButGAMMA *1/Environnement.A(uneProposition).size() + 1/unModule.getSizeAjoutes()));
+				System.out.println("Les buts donnent à " + unModule + " une valeur d'énergie égal à " + energieInjecteeSousButGAMMA * 1/Environnement.A(uneProposition).size() * 1.00f/unModule.getSizeAjoutes()); 
+				unModule.setSeuilActivationALPHA(unModule.getSeuilActivationALPHA() +(float) (energieInjecteeSousButGAMMA * 1.0/Environnement.A(uneProposition).size() * 1.0/unModule.getSizeAjoutes()));
 			}
 		}
 		for(String uneProposition : Agent.R()) {
@@ -140,6 +140,15 @@ public class Environnement {
 			}
 		}
 		
+	}
+	
+	public void updateEnergyDecay() {
+		System.out.println("Niveau activation des modules apres decay : ");
+		for(Module unModuleAModifier : listeModule){
+			for(Module unModuleConflit : unModuleAModifier.getConf()) {
+				System.out.println("   niveau d'activation de " + unModuleAModifier +": +" + unModuleAModifier.getSeuilActivationALPHA() * energiePriseButProtegeDELTA/energieInjecteeSousButGAMMA);
+			}
+		}
 	}
 	
 	/** Pas surs de cette version
