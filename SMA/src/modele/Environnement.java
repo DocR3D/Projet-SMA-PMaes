@@ -8,7 +8,6 @@ import java.util.ArrayList;
 //
 public class Environnement {
 	
-	public boolean isAModuleActivated = false;
 	private float defaultSeuilActivationTHETA;
 	
 	private float niveauActivationPI;
@@ -17,9 +16,8 @@ public class Environnement {
 	private float energieInjecteePropositionVraiePHI;
 	private float energiePriseButProtegeDELTA;
 	
-	private Agent agent;
-	private Boolean but = false;
 	private static ArrayList<Module> listeModule;
+	private static ArrayList<Module> listeModuleActivable;
 	
 
 
@@ -33,11 +31,11 @@ public class Environnement {
 		this.energieInjecteePropositionVraiePHI = energieInjecteePropositionVraiePHI;
 		this.energiePriseButProtegeDELTA = energiePriseButProtegeDELTA;
 		
-		this.agent = new Agent();
+		new Agent();
 		
 		//Modules - lambda Ã  0 pour le moment, TO IMPLEMENT
 		
-		this.listeModule = new ArrayList<Module>();
+		Environnement.listeModule = new ArrayList<Module>();
 		Module objet_cle = new Module(0,"objet_cle");
 		objet_cle.addCondition("presence_salle_1", true);
 		Module objet_outil = new Module(0,"objet_outil");
@@ -54,11 +52,13 @@ public class Environnement {
 		listeModule.add(unModule);
 	}
 	
-	public boolean executable(Module unModule) {
-		if(unModule.getSeuilActivationALPHA() > this.seuilActivationTHETA && unModule.isConditionOkey()) {
-			isAModuleActivated = true;
-			return true;
-		}else return false;
+	public void executable() {
+		Environnement.listeModuleActivable = new ArrayList<Module>();
+		for(Module unModule: listeModule) {
+			if(unModule.getSeuilActivationALPHA() > this.seuilActivationTHETA && unModule.isConditionOkey()) {
+				Environnement.listeModuleActivable.add(unModule);
+			}
+		}
 	}
 	
 	public void calculLinkBetweenModules() {
@@ -105,7 +105,7 @@ public class Environnement {
 	
 	//Si rien n'a été éxécuté, on met à jours theta
 	public void updateTheta() {
-		if(!isAModuleActivated) { //TODO : No module has been activated
+		if(listeModuleActivable.size() != 0) { 
 			this.seuilActivationTHETA = this.seuilActivationTHETA - this.seuilActivationTHETA/10; // On retire 10 pourcents
 			System.out.println("L'environnement diminue Theta de 10%, Theta = " + this.seuilActivationTHETA);
 		}else {		// Si un module a été activé, on remet la valeur par défaut
@@ -153,10 +153,9 @@ public class Environnement {
 	public Module getModuleToExecute() {
 		Module bestModule = null;
 		for(Module unModule : listeModule) {
-			if(executable(unModule) && (bestModule == null || unModule.getSeuilActivationALPHA() > bestModule.getSeuilActivationALPHA()))
+			if(listeModuleActivable.contains(unModule) && (bestModule == null || unModule.getSeuilActivationALPHA() > bestModule.getSeuilActivationALPHA()))
 				bestModule = unModule;
 		}
-		if(bestModule == null ) isAModuleActivated = false;
 		return bestModule;
 	}
 }
