@@ -93,18 +93,19 @@ public class Main {
 		place_board_in_vise.addDetruits(board_in_hand.toString(), true);
 		
 		Agent a = new Agent();
-		a.addPropositionInitiale(hand_is_empty.toString(), true);
-		a.addPropositionInitiale(sander_somewhere.toString(), true);
-		a.addPropositionInitiale(sprayer_somewhere.toString(), true);
-		a.addPropositionInitiale(operationnal.toString(), true);
-		a.addPropositionInitiale(board_somewhere.toString(), true);
+		a.addPropositionInitiale(hand_is_empty.toString());
+		a.addPropositionInitiale(hand_is_empty.toString());
+		a.addPropositionInitiale(sander_somewhere.toString());
+		a.addPropositionInitiale(sprayer_somewhere.toString());
+		a.addPropositionInitiale(operationnal.toString());
+		a.addPropositionInitiale(board_somewhere.toString());
 		
-		a.addBut(board_sanded.toString(), true);
-		a.addBut(self_painted.toString(), true);
+		a.addBut(board_sanded.toString());
+		a.addBut(self_painted.toString());
 		
 		//D�but de la simulation
 		int time = 1;
-		while(time < 2) {
+		while(time < 3) {
 			System.out.println("TIME : " + time);
 			System.out.println(a.printState());
 			//Calcul des activations des modules
