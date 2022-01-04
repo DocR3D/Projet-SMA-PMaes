@@ -67,7 +67,6 @@ public class Main {
 		put_down_board.addAjoutes(hand_is_empty.toString(), true);
 		put_down_board.addDetruits(board_in_hand.toString(), true);
 		
-		
 		//deux fois le module pour check avec les deux mains, dans l'ex de pattie maes
 		Module sand_board_in_hand = new Module((float) 5,"sand_board_in_hand");
 		sand_board_in_hand.addCondition(operationnal.toString(), true);
@@ -111,11 +110,6 @@ public class Main {
 			e.updateTheta();
 		//}
 		
-		
-		
-
-
-
 	}
 
 }
