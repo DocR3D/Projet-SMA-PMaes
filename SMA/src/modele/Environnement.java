@@ -74,7 +74,7 @@ public class Environnement {
 			}
 	}
 	
-	public ArrayList<Module> M(String uneProposition){
+	public static ArrayList<Module> M(String uneProposition){
 		ArrayList<Module> result = new ArrayList<Module>();
 		for(Module unModule : listeModule) {
 			if(unModule.containCondition(uneProposition))
@@ -83,7 +83,7 @@ public class Environnement {
 		if(result.size() == 0) return null;
 		return result;
 	}
-	public ArrayList<Module> A(String uneProposition){
+	public static  ArrayList<Module> A(String uneProposition){
 		ArrayList<Module> result = new ArrayList<Module>();
 		for(Module unModule : listeModule) {
 			if(unModule.containAjoutes(uneProposition))
@@ -93,7 +93,7 @@ public class Environnement {
 		return result;
 	}
 	
-	public ArrayList<Module> U(String uneProposition){
+	public static  ArrayList<Module> U(String uneProposition){
 		ArrayList<Module> result = new ArrayList<Module>();
 		for(Module unModule : listeModule) {
 			if(unModule.containDetruits(uneProposition))

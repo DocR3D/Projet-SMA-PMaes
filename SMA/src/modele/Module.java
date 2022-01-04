@@ -39,6 +39,17 @@ public class Module {
 	
 	public void activateModule() {
 		System.out.println("le module " + this + " est activé");
+		
+		//Change la valeur de toute les conditions pour tout les modules contenant la proposition
+		for(String uneProposition : this.ajoutes.keySet()) {
+			Environnement.A(uneProposition).forEach(m -> m.getConditions().put(uneProposition, true));
+		}
+		
+		//Change la valeur de toute les conditions pour tout les modules contenant la proposition
+		for(String uneProposition : this.detruits.keySet()) {
+			Environnement.A(uneProposition).forEach(m -> m.getConditions().put(uneProposition, false));
+		}
+			
 		this.seuilActivationALPHA = 0;
 	}
 	
