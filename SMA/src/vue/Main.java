@@ -10,7 +10,7 @@ public class Main {
 	public static void main(String[] args) {
 		// Initialisation 
 		Agent a = new Agent();
-		Environnement e = new Environnement(0, 0, 0, 0, 0);
+		Environnement e = new Environnement(10, 10, 10, 10, 10);
 		
 		//Module without conflicts, adds or deletes
 		Module hand_is_empty = new Module((float) 5,"hand_is_empty");
@@ -92,23 +92,25 @@ public class Main {
 		place_board_in_vise.addAjoutes(board_in_vise.toString(), true);
 		place_board_in_vise.addDetruits(board_in_hand.toString(), true);
 		
-		//Dï¿½but de la simulation
+		//Début de la simulation
 		int time = 1;
-		//while(true) {
+		while(time < 10) {
 			System.out.println("TIME : " + time);
 			System.out.println(a.printState());
 			//Calcul des activations des modules
-			
-			// Diffusion d'ï¿½nergie d'activation
-			
+			e.executable();
+			// Diffusion d'énergie d'activation
+			e.updateEnergy();
 			//Si executable, Execution d'un module
 			Module executableModule = e.getModuleToExecute();
 			if(executableModule != null) {
-				
+				executableModule.activateModule();
 			}
 			//Sinon diminution du seuil d'activation
 			e.updateTheta();
-		//}
+			time++;
+			System.out.println("");
+		}
 		
 	}
 

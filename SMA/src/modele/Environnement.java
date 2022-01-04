@@ -30,22 +30,7 @@ public class Environnement {
 		this.energieInjecteeSousButGAMMA = energieInjecteeSousButGAMMA;
 		this.energieInjecteePropositionVraiePHI = energieInjecteePropositionVraiePHI;
 		this.energiePriseButProtegeDELTA = energiePriseButProtegeDELTA;
-		
-		new Agent();
-		
-		//Modules - lambda Ã  0 pour le moment, TO IMPLEMENT
-		
-		Environnement.listeModule = new ArrayList<Module>();
-		Module objet_cle = new Module(0,"objet_cle");
-		objet_cle.addCondition("presence_salle_1", true);
-		Module objet_outil = new Module(0,"objet_outil");
-		objet_outil.addCondition("presence_salle_2", true);
-		Module objet_meuble_1 = new Module(0,"objet_meuble_1");
-		objet_meuble_1.addCondition("presence_salle_2", true);
-		Module objet_meuble_2 = new Module(0,"objet_meuble_2");
-		objet_meuble_2.addCondition("presence_salle_2", true);
-		Module objet_porte = new Module(0,"objet_porte");
-		objet_porte.addAjoutes("presence_salle_2", true);
+		listeModule = new ArrayList<Module>();
 	} 
 	
 	public static void addModuleToListModule(Module unModule) {
@@ -134,21 +119,23 @@ public class Environnement {
 	}
 	
 	/** Pas surs de cette version**/
-	public void updateEnergy(Module unModule) {
+	public void updateEnergy() {
 			float valeurToAdd = 0;
 			float valeurToRemove = 0;
 			// energy injected for each corresponding P
-			valeurToAdd = unModule.getNumberTrueCondition() * this.energieInjecteePropositionVraiePHI; // Pour chaque conditions vraie, on ajoute un phi
-			
-			//energy injected for each corresponding G
-			valeurToAdd += unModule.getNumberTrueAjoutes() * this.energieInjecteeSousButGAMMA;
-			
-			//energy taken away for each corresponding G
-			valeurToRemove = unModule.getNumberTrueDetruits() * this.energiePriseButProtegeDELTA;
-			
-			System.out.println("L'environnement donne à " + unModule + " une valeur d'énergie égal à " + (valeurToAdd - valeurToRemove));
-			unModule.setSeuilActivationALPHA(unModule.getSeuilActivationALPHA() + valeurToAdd - valeurToRemove); // On met à jours alpha
-	}
+			for(Module unModule : listeModule) {
+				valeurToAdd = unModule.getNumberTrueCondition() * this.energieInjecteePropositionVraiePHI; // Pour chaque conditions vraie, on ajoute un phi
+				
+				//energy injected for each corresponding G
+				valeurToAdd += unModule.getNumberTrueAjoutes() * this.energieInjecteeSousButGAMMA;
+				
+				//energy taken away for each corresponding G
+				valeurToRemove = unModule.getNumberTrueDetruits() * this.energiePriseButProtegeDELTA;
+				
+				System.out.println("L'environnement donne à " + unModule + " une valeur d'énergie égal à " + (valeurToAdd - valeurToRemove));
+				unModule.setSeuilActivationALPHA(unModule.getSeuilActivationALPHA() + valeurToAdd - valeurToRemove); // On met à jours alpha
+			}
+		}
 	
 	public Module getModuleToExecute() {
 		Module bestModule = null;
