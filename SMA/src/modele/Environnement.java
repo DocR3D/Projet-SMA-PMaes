@@ -1,6 +1,7 @@
 package modele;
 
 import java.util.ArrayList;
+import modele.Agent;
 
 
 // Alphabet : 
@@ -119,7 +120,29 @@ public class Environnement {
 		}
 	}
 	
-	/** Pas surs de cette version**/
+	public void updateEnergyV2() {
+		for(String uneProposition : Agent.S().keySet()) {
+			for(Module unModule : Environnement.M(uneProposition)) {
+				System.out.println("L'environnement donne à " + unModule + " une valeur d'énergie égal à " + energieInjecteePropositionVraiePHI );
+				unModule.setSeuilActivationALPHA(unModule.getSeuilActivationALPHA() + energieInjecteePropositionVraiePHI);
+			}
+		}
+		for(String uneProposition : Agent.G().keySet()) {
+			for(Module unModule : Environnement.A(uneProposition)) {
+				System.out.println("Les buts donnent à " + unModule + " une valeur d'énergie égal à " + energieInjecteeSousButGAMMA );
+				unModule.setSeuilActivationALPHA(unModule.getSeuilActivationALPHA() + energieInjecteeSousButGAMMA);
+			}
+		}
+		for(String uneProposition : Agent.R().keySet()) {
+			for(Module unModule : Environnement.U(uneProposition)) {
+				System.out.println("Les buts accomplit retirent à " + unModule + " une valeur d'énergie égal à " + energiePriseButProtegeDELTA );
+				unModule.setSeuilActivationALPHA(unModule.getSeuilActivationALPHA() - energiePriseButProtegeDELTA);
+			}
+		}
+		
+	}
+	
+	/** Pas surs de cette version
 	public void updateEnergy() {
 			float valeurToAdd = 0;
 			float valeurToRemove = 0;
@@ -137,7 +160,7 @@ public class Environnement {
 				System.out.println("L'environnement donne à " + unModule + " une valeur d'énergie égal à " + (valeurToAdd - valeurToRemove) + ", Pour obtenir une valeur total, Alpha = " + unModule.getSeuilActivationALPHA());
 
 			}
-		}
+		}*/
 	
 	public Module getModuleToExecute() {
 		Module bestModule = null;
