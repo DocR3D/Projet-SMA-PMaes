@@ -62,6 +62,15 @@ public class Environnement {
 		}else return false;
 	}
 	
+	public void calculLinkBetweenModules() {
+		for(Module unModuleAModifier : listeModule)
+			for(Module unModuleAVerifier: listeModule) {
+				for(String uneProposition : unModuleAModifier.getAjoutes().keySet()) {
+					if(unModuleAVerifier.containCondition())
+				}
+			}
+	}
+	
 	public ArrayList<Module> M(Proposition uneProposition){
 		ArrayList<Module> result = new ArrayList<Module>();
 		for(Module unModule : listeModule) {
@@ -95,14 +104,16 @@ public class Environnement {
 	public void updateTheta() {
 		if(!isAModuleActivated) { //TODO : No module has been activated
 			this.seuilActivationTHETA = this.seuilActivationTHETA - this.seuilActivationTHETA/10; // On retire 10 pourcents
-			System.out.println("L'environnement diminue Theta de 10%, nouvelle valeure : " + this.seuilActivationTHETA);
+			System.out.println("L'environnement diminue Theta de 10%, Theta = " + this.seuilActivationTHETA);
 		}else {		// Si un module a été activé, on remet la valeur par défaut
+			System.out.println("L'environnement à réinitialisé la valeur de Theta, Theta = " + this.defaultSeuilActivationTHETA);
 			this.seuilActivationTHETA = this.defaultSeuilActivationTHETA;
 		}
 	}
 	
 	public void updateEnergyWhenActivatingModule(Module m1) {
 		for(Module unModule : m1.getSucc()) {
+			System.out.println("L'environnement donne à " + unModule + " une valeur d'énergie égal à " + this.energieInjecteePropositionVraiePHI);
 			unModule.setSeuilActivationALPHA(unModule.getSeuilActivationALPHA() + this.energieInjecteePropositionVraiePHI);
 		}
 	}
@@ -119,7 +130,7 @@ public class Environnement {
 		}
 	}
 	
-	/** Pas surs de cette version
+	/** Pas surs de cette version**/
 	public void updateEnergy(Module unModule) {
 			float valeurToAdd = 0;
 			float valeurToRemove = 0;
@@ -132,8 +143,9 @@ public class Environnement {
 			//energy taken away for each corresponding G
 			valeurToRemove = unModule.getNumberTrueDetruits() * this.energiePriseButProtegeDELTA;
 			
+			System.out.println("L'environnement donne à " + unModule + " une valeur d'énergie égal à " + (valeurToAdd - valeurToRemove));
 			unModule.setSeuilActivationALPHA(unModule.getSeuilActivationALPHA() + valeurToAdd - valeurToRemove); // On met à jours alpha
-	} **/
+	}
 	
 	public Module getModuleToExecute() {
 		Module bestModule = null;

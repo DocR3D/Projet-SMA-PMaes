@@ -21,7 +21,10 @@ public class Main {
 		trouverClef.addCondition(trouverBatiment.toString(), true);
 		
 		//Début de la simulation
-		while(true) {
+		int time = 1;
+		//while(true) {
+			System.out.println("TIME : " + time);
+			System.out.println(a.printState());
 			//Calcul des activations des modules
 			
 			// Diffusion d'énergie d'activation
@@ -33,7 +36,7 @@ public class Main {
 			}
 			//Sinon diminution du seuil d'activation
 			e.updateTheta();
-		}
+		//}
 		
 		
 		

@@ -81,5 +81,18 @@ public class Agent {
 	public ArrayList<Proposition> R(){
 		return propositionButTerminees;
 	}
+
+	public String printState() {
+		String result = "State of the environnement : (";
+		for(Proposition uneProposition : S()) result = result + uneProposition.getNom() + " ";
+		result = result + ")\n goals of the environnement : (";
+		for(Proposition uneProposition : G()) result = result + uneProposition.getNom() + " ";
+		result = result + ")\n protected goals of the environment : (";
+		for(Proposition uneProposition : R()) result = result + uneProposition.getNom() + " ";
+		result = result + ")\n";
+		return result;
+	}
+	
+	
 	
 }

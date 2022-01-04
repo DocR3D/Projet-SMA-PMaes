@@ -89,6 +89,19 @@ public class Module {
 		}
 	}
 	
+	
+	public HashMap<String, Boolean> getConditions() {
+		return conditions;
+	}
+
+	public HashMap<String, Boolean> getAjoutes() {
+		return ajoutes;
+	}
+
+	public HashMap<String, Boolean> getDetruits() {
+		return detruits;
+	}
+
 	public int getSizeCondition() {
 		return this.conditions.values().size();
 	}
@@ -143,6 +156,14 @@ public class Module {
 	public ArrayList<Module> getConf() {
 		return conf;
 	}
+
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return this.nom;
+	}
+	
+	
 
 
 	
