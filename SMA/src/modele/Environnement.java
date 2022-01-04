@@ -132,7 +132,7 @@ public class Environnement {
 				//energy taken away for each corresponding G
 				valeurToRemove = unModule.getNumberTrueDetruits() * this.energiePriseButProtegeDELTA;
 				
-				System.out.println("L'environnement donne à " + unModule + " une valeur d'énergie égal à " + (valeurToAdd - valeurToRemove));
+				System.out.println("L'environnement donne à " + unModule + " une valeur d'énergie égal à " + (valeurToAdd - valeurToRemove) + ", Pour obtenir une valeur total, Alpha = " + unModule.getSeuilActivationALPHA());
 				unModule.setSeuilActivationALPHA(unModule.getSeuilActivationALPHA() + valeurToAdd - valeurToRemove); // On met à jours alpha
 			}
 		}
