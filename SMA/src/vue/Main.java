@@ -104,7 +104,7 @@ public class Main {
 		
 		//D�but de la simulation
 		int time = 1;
-		while(time < 10) {
+		while(time < 50) {
 			System.out.println("TIME : " + time);
 			System.out.println(a.printState());
 			//Calcul des activations des modules

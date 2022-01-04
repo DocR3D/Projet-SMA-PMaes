@@ -90,7 +90,7 @@ public class Environnement {
 	
 	//Si rien n'a été éxécuté, on met à jours theta
 	public void updateTheta() {
-		if(listeModuleActivable.size() != 0) { 
+		if(listeModuleActivable.size() == 0) { 
 			this.seuilActivationTHETA = this.seuilActivationTHETA - this.seuilActivationTHETA/10; // On retire 10 pourcents
 			System.out.println("L'environnement diminue Theta de 10%, Theta = " + this.seuilActivationTHETA);
 		}else {		// Si un module a été activé, on remet la valeur par défaut
