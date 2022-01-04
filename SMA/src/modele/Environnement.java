@@ -8,18 +8,18 @@ import java.util.HashMap;
 // α = Alpha, π = Pi, θ = Theta, γ = Gamma, φ = Phi, δ = delta,
 //
 public class Environnement {
-	
+
 	private float defaultSeuilActivationTHETA;
-	
+
 	private float niveauActivationPI;
 	private float seuilActivationTHETA;
 	private float energieInjecteeSousButGAMMA;
 	private float energieInjecteePropositionVraiePHI;
 	private float energiePriseButProtegeDELTA;
-	
+
 	private static ArrayList<Module> listeModule;
 	private static ArrayList<Module> listeModuleActivable;
-	
+
 	public static int time = 1;
 
 
@@ -34,11 +34,11 @@ public class Environnement {
 		this.energiePriseButProtegeDELTA = energiePriseButProtegeDELTA;
 		listeModule = new ArrayList<Module>();
 	} 
-	
+
 	public static void addModuleToListModule(Module unModule) {
 		listeModule.add(unModule);
 	}
-	
+
 	public void executable() {
 		Environnement.listeModuleActivable = new ArrayList<Module>();
 		for(Module unModule: listeModule) {
@@ -48,7 +48,7 @@ public class Environnement {
 			}
 		}
 	}
-	
+
 	public void calculLinkBetweenModules() {
 		for(Module unModuleAModifier : listeModule)
 			for(Module unModuleAVerifier: listeModule) {
@@ -61,7 +61,7 @@ public class Environnement {
 				}
 			}
 	}
-	
+
 	public static ArrayList<Module> M(String uneProposition){
 		ArrayList<Module> result = new ArrayList<Module>();
 		for(Module unModule : listeModule) {
@@ -80,7 +80,7 @@ public class Environnement {
 		if(result.size() == 0) return null;
 		return result;
 	}
-	
+
 	public static  ArrayList<Module> U(String uneProposition){
 		ArrayList<Module> result = new ArrayList<Module>();
 		for(Module unModule : listeModule) {
@@ -90,7 +90,7 @@ public class Environnement {
 		if(result.size() == 0) return null;
 		return result;
 	}
-	
+
 	//Si rien n'a été éxécuté, on met à jours theta
 	public void updateTheta() {
 		if(listeModuleActivable.size() == 0) { 
@@ -101,26 +101,26 @@ public class Environnement {
 			this.seuilActivationTHETA = this.defaultSeuilActivationTHETA;
 		}
 	}
-	
+
 	public void updateEnergyWhenActivatingModule(Module m1) {
 		for(Module unModule : m1.getSucc()) {
 			System.out.println("L'environnement donne à " + unModule + " une valeur d'énergie égal à " + this.energieInjecteePropositionVraiePHI);
 			unModule.setSeuilActivationALPHA(unModule.getSeuilActivationALPHA() + this.energieInjecteePropositionVraiePHI);
 		}
 	}
-	
+
 	public void updateEnergyWhenInactif(Module m1) {
 		for(Module unModule : m1.getPred()) {
 			unModule.setSeuilActivationALPHA(unModule.getSeuilActivationALPHA() + this.energieInjecteeSousButGAMMA);
 		}
 	}
-	
+
 	public void updateEnergyOnConflit(Module m1) {
 		for(Module unModule : m1.getConf()) {
 			unModule.setSeuilActivationALPHA(unModule.getSeuilActivationALPHA() - this.energiePriseButProtegeDELTA);
 		}
 	}
-	
+
 	public void updateEnergyStateGoalAndGoalDone() {
 		for(String uneProposition : Agent.S()) {
 			for(Module unModule : Environnement.M(uneProposition)) {
@@ -140,9 +140,9 @@ public class Environnement {
 				unModule.setSeuilActivationALPHA(unModule.getSeuilActivationALPHA() - (energiePriseButProtegeDELTA/Environnement.U(uneProposition).size() + 1/unModule.getNumberTrueDetruits()));
 			}
 		}
-		
+
 	}
-	
+
 	public void updateEnergyPropagation() {
 		HashMap<String,Boolean> condition = new HashMap<String,Boolean>();
 		HashMap<String,Boolean> ajouts = new HashMap<String,Boolean>();
@@ -153,7 +153,7 @@ public class Environnement {
 			for(String uneProposition :  unModule.getAjoutes().keySet())
 				if(!ajouts.containsKey(uneProposition)&& unModule.getAjoutes().get(uneProposition) == false) ajouts.put(uneProposition,unModule.getAjoutes().get(uneProposition));
 		}
-		
+
 		for(String uneProposition : condition.keySet()) {
 			if(ajouts.containsKey(uneProposition)) {
 				for(Module unModuleX : Environnement.A(uneProposition)) {
@@ -163,7 +163,7 @@ public class Environnement {
 				}
 			}
 		}
-		
+
 		for(String uneProposition : ajouts.keySet()) {
 			if(condition.containsKey(uneProposition)) {
 				for(Module unModule : Environnement.M(uneProposition)) {
@@ -171,44 +171,50 @@ public class Environnement {
 				}
 			}
 		}
-	
 
-		
+
+
 	}
-	
+
 	public void updateEnergyDecay() {
-		HashMap<String,Boolean> condition = new HashMap<String,Boolean>();
-		HashMap<String,Boolean> detruits = new HashMap<String,Boolean>();
-		System.out.println("Niveau activation des modules apres decay : ");
-		for(Module unModule : Environnement.listeModule) {
-			for(String uneProposition :  unModule.getConditions().keySet())
-				if(!condition.containsKey(uneProposition) && unModule.getConditions().get(uneProposition) == true) condition.put(uneProposition,unModule.getConditions().get(uneProposition));
-			for(String uneProposition :  unModule.getDetruits().keySet())
-				if(!detruits.containsKey(uneProposition)&& unModule.getDetruits().get(uneProposition) == true) detruits.put(uneProposition,unModule.getDetruits().get(uneProposition));
-		}
-		for(String uneProposition : condition.keySet()) {
-			if(detruits.containsKey(uneProposition)) {
-				for(Module unModuleX : Environnement.M(uneProposition)) {
-					for(Module unModuleY : Environnement.U(uneProposition)) {
-						if(unModuleX.getConditions().get(uneProposition) == true && unModuleY.getDetruits().get(uneProposition) == true ) {
-							if(unModuleX.getSeuilActivationALPHA() < unModuleY.getSeuilActivationALPHA())
-								unModuleY.setSeuilActivationALPHA(0);
-							else {
-								float max = unModuleX.getSeuilActivationALPHA()* energiePriseButProtegeDELTA/energieInjecteeSousButGAMMA*1/this.U(uneProposition).size()*1/unModuleY.getDetruits().keySet().size();
-								if( max < unModuleY.getSeuilActivationALPHA()) {
-									max = unModuleY.getSeuilActivationALPHA();
+		for(String uneProposition : Agent.S()) {
+			ArrayList<Module> cx = this.M(uneProposition);
+			ArrayList<Module> dy = this.U(uneProposition);
+			for(Module unModuleX : cx) {
+				for(Module unModuleY : dy) {
+					if(unModuleX.getConditions().get(uneProposition) == true && unModuleY.getDetruits().get(uneProposition) == true ) {
+						if(unModuleX.getSeuilActivationALPHA()*(time-1) < unModuleY.getSeuilActivationALPHA()*(time-1)) {
+							ArrayList<Module> cy = this.U(uneProposition);
+							ArrayList<Module> dx = this.M(uneProposition);
+							for(Module unAutreModuleX : cx) {
+								for(Module unAutreModuleY : dy) {
+									if(unAutreModuleX.containCondition(uneProposition)&& unAutreModuleY.containDetruits(uneProposition)) {
+										unModuleY.setSeuilActivationALPHA(0); 
+										break;
+									}
 								}
-								System.out.println("   niveau d'activation de " + unModuleY +": " + max);
-								unModuleY.setSeuilActivationALPHA(max);
 							}
 						}
+						float max = unModuleX.getSeuilActivationALPHA()*energiePriseButProtegeDELTA/energieInjecteeSousButGAMMA*1/this.U(uneProposition).size()*1/unModuleY.getDetruits().keySet().size(); 
+						if( max < unModuleY.getSeuilActivationALPHA()) { 
+							max = unModuleY.getSeuilActivationALPHA(); 
+						} 
+						unModuleY.setSeuilActivationALPHA(max); 
+
 					}
 				}
+
 			}
+
+
+
 		}
-		
+
+		for(Module unModule : listeModule) {
+			System.out.println("   niveau d'activation de " + unModule +": " + unModule.getSeuilActivationALPHA()); 
+		}
 	}
-	
+
 	/** Pas surs de cette version
 	public void updateEnergy() {
 			float valeurToAdd = 0;
@@ -216,19 +222,19 @@ public class Environnement {
 			// energy injected for each corresponding P
 			for(Module unModule : listeModule) {
 				valeurToAdd = unModule.getNumberTrueCondition() * this.energieInjecteePropositionVraiePHI; // Pour chaque conditions vraie, on ajoute un phi
-				
+
 				//energy injected for each corresponding G
 				valeurToAdd += unModule.getNumberTrueAjoutes() * this.energieInjecteeSousButGAMMA;
-				
+
 				//energy taken away for each corresponding G
 				valeurToRemove = unModule.getNumberTrueDetruits() * this.energiePriseButProtegeDELTA;
-				
+
 				unModule.setSeuilActivationALPHA(unModule.getSeuilActivationALPHA() + valeurToAdd - valeurToRemove); // On met à jours alpha
 				System.out.println("L'environnement donne à " + unModule + " une valeur d'énergie égal à " + (valeurToAdd - valeurToRemove) + ", Pour obtenir une valeur total, Alpha = " + unModule.getSeuilActivationALPHA());
 
 			}
 		}*/
-	
+
 	public Module getModuleToExecute() {
 		Module bestModule = null;
 		for(Module unModule : listeModule) {
