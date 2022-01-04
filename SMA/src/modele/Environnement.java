@@ -41,6 +41,7 @@ public class Environnement {
 		Environnement.listeModuleActivable = new ArrayList<Module>();
 		for(Module unModule: listeModule) {
 			if(unModule.getSeuilActivationALPHA() > this.seuilActivationTHETA && unModule.isConditionOkey()) {
+				System.out.println("L'environnement peut executer celui de " + unModule + " qui a une activation de : " + unModule.getSeuilActivationALPHA());
 				Environnement.listeModuleActivable.add(unModule);
 			}
 		}
