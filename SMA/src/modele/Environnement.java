@@ -20,6 +20,7 @@ public class Environnement {
 	private static ArrayList<Module> listeModule;
 	private static ArrayList<Module> listeModuleActivable;
 	
+	public static int time = 1;
 
 
 	public Environnement(float niveauActivationPI, float seuilActivationTHETA, float energieInjecteeSousButGAMMA,
@@ -146,7 +147,7 @@ public class Environnement {
 		HashMap<String,Boolean> condition = new HashMap<String,Boolean>();
 		HashMap<String,Boolean> ajouts = new HashMap<String,Boolean>();
 
-		for(Module unModule : this.listeModule) {
+		for(Module unModule : Environnement.listeModule) {
 			for(String uneProposition :  unModule.getConditions().keySet())
 				if(!condition.containsKey(uneProposition) && unModule.getConditions().get(uneProposition) == false) condition.put(uneProposition,unModule.getConditions().get(uneProposition));
 			for(String uneProposition :  unModule.getAjoutes().keySet())
@@ -155,15 +156,17 @@ public class Environnement {
 		
 		for(String uneProposition : condition.keySet()) {
 			if(ajouts.containsKey(uneProposition)) {
-				for(Module unModule : this.A(uneProposition)) {
-					if(unModule.getAjoutes().get(uneProposition) == false) unModule.setSeuilActivationALPHA(unModule.getSeuilActivationALPHA() * energieInjecteePropositionVraiePHI/energieInjecteeSousButGAMMA);
+				for(Module unModuleX : Environnement.A(uneProposition)) {
+					for(Module unModuleY : Environnement.M(uneProposition)) {
+						if(unModuleX.getAjoutes().get(uneProposition) == false && unModuleY.getConditions().get(uneProposition) == false ) unModuleY.setSeuilActivationALPHA(unModuleX.getSeuilActivationALPHA()*(time-1) * 1/this.A(uneProposition).size()*1/unModuleY.getAjoutes().keySet().size());
+					}
 				}
 			}
 		}
 		
 		for(String uneProposition : ajouts.keySet()) {
 			if(condition.containsKey(uneProposition)) {
-				for(Module unModule : this.M(uneProposition)) {
+				for(Module unModule : Environnement.M(uneProposition)) {
 					if(unModule.getConditions().get(uneProposition) == false) unModule.setSeuilActivationALPHA(unModule.getSeuilActivationALPHA() * energieInjecteePropositionVraiePHI/energieInjecteeSousButGAMMA);
 				}
 			}
@@ -177,7 +180,7 @@ public class Environnement {
 		HashMap<String,Boolean> condition = new HashMap<String,Boolean>();
 		HashMap<String,Boolean> detruits = new HashMap<String,Boolean>();
 		System.out.println("Niveau activation des modules apres decay : ");
-		for(Module unModule : this.listeModule) {
+		for(Module unModule : Environnement.listeModule) {
 			for(String uneProposition :  unModule.getConditions().keySet())
 				if(!condition.containsKey(uneProposition) && unModule.getConditions().get(uneProposition) == true) condition.put(uneProposition,unModule.getConditions().get(uneProposition));
 			for(String uneProposition :  unModule.getDetruits().keySet())
@@ -185,11 +188,20 @@ public class Environnement {
 		}
 		for(String uneProposition : condition.keySet()) {
 			if(detruits.containsKey(uneProposition)) {
-				for(Module unModule : this.M(uneProposition)) {
-					
-					if(unModule.getConditions().get(uneProposition) == true) {
-						System.out.println("   niveau d'activation de " + unModule +": " + unModule.getSeuilActivationALPHA() * energiePriseButProtegeDELTA/energieInjecteeSousButGAMMA);
-						unModule.setSeuilActivationALPHA(unModule.getSeuilActivationALPHA() * energiePriseButProtegeDELTA/energieInjecteeSousButGAMMA);
+				for(Module unModuleX : Environnement.M(uneProposition)) {
+					for(Module unModuleY : Environnement.U(uneProposition)) {
+						if(unModuleX.getConditions().get(uneProposition) == true && unModuleY.getDetruits().get(uneProposition) == true ) {
+							if(unModuleX.getSeuilActivationALPHA() < unModuleY.getSeuilActivationALPHA())
+								unModuleY.setSeuilActivationALPHA(0);
+							else {
+								float max = unModuleX.getSeuilActivationALPHA()* energiePriseButProtegeDELTA/energieInjecteeSousButGAMMA*1/this.U(uneProposition).size()*1/unModuleY.getDetruits().keySet().size();
+								if( max < unModuleY.getSeuilActivationALPHA()) {
+									max = unModuleY.getSeuilActivationALPHA();
+								}
+								System.out.println("   niveau d'activation de " + unModuleY +": " + max);
+								unModuleY.setSeuilActivationALPHA(max);
+							}
+						}
 					}
 				}
 			}

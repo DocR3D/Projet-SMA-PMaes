@@ -104,14 +104,15 @@ public class Main {
 		a.addBut(self_painted.toString());
 		
 		//D�but de la simulation
-		int time = 1;
-		while(time < 2) {
-			System.out.println("TIME : " + time);
+
+		while(Environnement.time < 2) {
+			System.out.println("TIME : " + Environnement.time);
 			System.out.println(a.printState());
 			//Calcul des activations des modules
 			e.executable();
 			// Diffusion d'�nergie d'activation
 			e.updateEnergyStateGoalAndGoalDone();
+			e.updateEnergyPropagation();
 			e.updateEnergyDecay();
 			//Si executable, Execution d'un module
 			Module executableModule = e.getModuleToExecute();
@@ -120,7 +121,7 @@ public class Main {
 			}
 			//Sinon diminution du seuil d'activation
 			e.updateTheta();
-			time++;
+			Environnement.time++;
 			System.out.println("");
 		}
 		
