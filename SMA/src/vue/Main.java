@@ -112,6 +112,7 @@ public class Main {
 			e.executable();
 			// Diffusion d'�nergie d'activation
 			e.updateEnergyStateGoalAndGoalDone();
+			e.updateEnergyDecay();
 			//Si executable, Execution d'un module
 			Module executableModule = e.getModuleToExecute();
 			if(executableModule != null) {

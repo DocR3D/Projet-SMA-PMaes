@@ -1,7 +1,7 @@
 package modele;
 
 import java.util.ArrayList;
-import modele.Agent;
+import java.util.HashMap;
 
 
 // Alphabet : 
@@ -142,13 +142,59 @@ public class Environnement {
 		
 	}
 	
-	public void updateEnergyDecay() {
-		System.out.println("Niveau activation des modules apres decay : ");
-		for(Module unModuleAModifier : listeModule){
-			for(Module unModuleConflit : unModuleAModifier.getConf()) {
-				System.out.println("   niveau d'activation de " + unModuleAModifier +": +" + unModuleAModifier.getSeuilActivationALPHA() * energiePriseButProtegeDELTA/energieInjecteeSousButGAMMA);
+	public void updateEnergyPropagation() {
+		HashMap<String,Boolean> condition = new HashMap<String,Boolean>();
+		HashMap<String,Boolean> ajouts = new HashMap<String,Boolean>();
+
+		for(Module unModule : this.listeModule) {
+			for(String uneProposition :  unModule.getConditions().keySet())
+				if(!condition.containsKey(uneProposition) && unModule.getConditions().get(uneProposition) == false) condition.put(uneProposition,unModule.getConditions().get(uneProposition));
+			for(String uneProposition :  unModule.getAjoutes().keySet())
+				if(!ajouts.containsKey(uneProposition)&& unModule.getAjoutes().get(uneProposition) == false) ajouts.put(uneProposition,unModule.getAjoutes().get(uneProposition));
+		}
+		
+		for(String uneProposition : condition.keySet()) {
+			if(ajouts.containsKey(uneProposition)) {
+				for(Module unModule : this.A(uneProposition)) {
+					if(unModule.getAjoutes().get(uneProposition) == false) unModule.setSeuilActivationALPHA(unModule.getSeuilActivationALPHA() * energieInjecteePropositionVraiePHI/energieInjecteeSousButGAMMA);
+				}
 			}
 		}
+		
+		for(String uneProposition : ajouts.keySet()) {
+			if(condition.containsKey(uneProposition)) {
+				for(Module unModule : this.M(uneProposition)) {
+					if(unModule.getConditions().get(uneProposition) == false) unModule.setSeuilActivationALPHA(unModule.getSeuilActivationALPHA() * energieInjecteePropositionVraiePHI/energieInjecteeSousButGAMMA);
+				}
+			}
+		}
+	
+
+		
+	}
+	
+	public void updateEnergyDecay() {
+		HashMap<String,Boolean> condition = new HashMap<String,Boolean>();
+		HashMap<String,Boolean> detruits = new HashMap<String,Boolean>();
+		System.out.println("Niveau activation des modules apres decay : ");
+		for(Module unModule : this.listeModule) {
+			for(String uneProposition :  unModule.getConditions().keySet())
+				if(!condition.containsKey(uneProposition) && unModule.getConditions().get(uneProposition) == true) condition.put(uneProposition,unModule.getConditions().get(uneProposition));
+			for(String uneProposition :  unModule.getDetruits().keySet())
+				if(!detruits.containsKey(uneProposition)&& unModule.getDetruits().get(uneProposition) == true) detruits.put(uneProposition,unModule.getDetruits().get(uneProposition));
+		}
+		for(String uneProposition : condition.keySet()) {
+			if(detruits.containsKey(uneProposition)) {
+				for(Module unModule : this.M(uneProposition)) {
+					
+					if(unModule.getConditions().get(uneProposition) == true) {
+						System.out.println("   niveau d'activation de " + unModule +": " + unModule.getSeuilActivationALPHA() * energiePriseButProtegeDELTA/energieInjecteeSousButGAMMA);
+						unModule.setSeuilActivationALPHA(unModule.getSeuilActivationALPHA() * energiePriseButProtegeDELTA/energieInjecteeSousButGAMMA);
+					}
+				}
+			}
+		}
+		
 	}
 	
 	/** Pas surs de cette version
