@@ -4,18 +4,18 @@ import java.util.ArrayList;
 
 public class Agent {
 
-	private ArrayList<Boolean> propositionVraies;
-	private ArrayList<Boolean> propositionButs;
-	private ArrayList<Boolean> propositionButTerminees;
+	private ArrayList<Proposition> propositionVraies; 			// S
+	private ArrayList<Proposition> propositionButs;	  			// G
+	private ArrayList<Proposition> propositionButTerminees;		// R
 	
 	private ArrayList<Object> possession;
 
 	public Agent() {
 		super();
 		
-		this.propositionVraies = new ArrayList<Boolean>();
-		this.propositionButs = new ArrayList<Boolean>();
-		this.propositionButTerminees = new ArrayList<Boolean>();
+		this.propositionVraies = new ArrayList<Proposition>();
+		this.propositionButs = new ArrayList<Proposition>();
+		this.propositionButTerminees = new ArrayList<Proposition>();
 		
 		this.possession = new ArrayList<Object>();
 	}
@@ -69,4 +69,17 @@ public class Agent {
 	public Boolean isOwner(Object unObjet) {
 		return this.possession.contains(unObjet);
 	}
+	
+	public ArrayList<Proposition> S(){
+		return propositionVraies;
+	}
+	
+	public ArrayList<Proposition> G(){
+		return propositionButs;
+	}
+	
+	public ArrayList<Proposition> R(){
+		return propositionButTerminees;
+	}
+	
 }
