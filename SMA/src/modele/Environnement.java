@@ -8,8 +8,7 @@ import java.util.ArrayList;
 //
 public class Environnement {
 	
-	public boolean isAModuleActivated = false; //TODO : Trouver quand remettre la variable à false;
-	
+	public boolean isAModuleActivated = false;
 	private float defaultSeuilActivationTHETA;
 	
 	private float niveauActivationPI;
@@ -66,12 +65,16 @@ public class Environnement {
 		for(Module unModuleAModifier : listeModule)
 			for(Module unModuleAVerifier: listeModule) {
 				for(String uneProposition : unModuleAModifier.getAjoutes().keySet()) {
-					if(unModuleAVerifier.containCondition())
+					if(unModuleAVerifier.containCondition(uneProposition)) unModuleAModifier.addSucc(unModuleAVerifier);
+				}
+				for(String uneProposition : unModuleAModifier.getConditions().keySet()) {
+					if(unModuleAVerifier.containAjoutes(uneProposition)) unModuleAModifier.addPred(unModuleAVerifier);
+					if(unModuleAVerifier.containDetruits(uneProposition)) unModuleAModifier.addConf(unModuleAVerifier);
 				}
 			}
 	}
 	
-	public ArrayList<Module> M(Proposition uneProposition){
+	public ArrayList<Module> M(String uneProposition){
 		ArrayList<Module> result = new ArrayList<Module>();
 		for(Module unModule : listeModule) {
 			if(unModule.containCondition(uneProposition))
@@ -80,7 +83,7 @@ public class Environnement {
 		if(result.size() == 0) return null;
 		return result;
 	}
-	public ArrayList<Module> A(Proposition uneProposition){
+	public ArrayList<Module> A(String uneProposition){
 		ArrayList<Module> result = new ArrayList<Module>();
 		for(Module unModule : listeModule) {
 			if(unModule.containAjoutes(uneProposition))
@@ -90,7 +93,7 @@ public class Environnement {
 		return result;
 	}
 	
-	public ArrayList<Module> U(Proposition uneProposition){
+	public ArrayList<Module> U(String uneProposition){
 		ArrayList<Module> result = new ArrayList<Module>();
 		for(Module unModule : listeModule) {
 			if(unModule.containDetruits(uneProposition))

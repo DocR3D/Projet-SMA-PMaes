@@ -42,19 +42,29 @@ public class Module {
 		this.seuilActivationALPHA = 0;
 	}
 	
-	public boolean containCondition(Proposition uneProposition) {
-		if(this.conditions.containsKey(uneProposition.getNom())) return true;
+	public boolean containCondition(String uneProposition) {
+		if(this.conditions.containsKey(uneProposition)) return true;
 		else return false;
 	}
 	
-	public boolean containAjoutes(Proposition uneProposition) {
-		if(this.ajoutes.containsKey(uneProposition.getNom())) return true;
+	public boolean containAjoutes(String uneProposition) {
+		if(this.ajoutes.containsKey(uneProposition)) return true;
 		else return false;
 	}
 	
-	public boolean containDetruits(Proposition uneProposition) {
-		if(this.detruits.containsKey(uneProposition.getNom())) return true;
+	public boolean containDetruits(String uneProposition) {
+		if(this.detruits.containsKey(uneProposition)) return true;
 		else return false;
+	}
+	
+	public void addSucc(Module unModule) {
+		this.succ.add(unModule);
+	}
+	public void addPred(Module unModule) {
+		this.pred.add(unModule);
+	}
+	public void addConf(Module unModule) {
+		this.conf.add(unModule);
 	}
 	
 	

@@ -1,21 +1,22 @@
 package modele;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Agent {
 
-	private ArrayList<Proposition> propositionVraies; 			// S
-	private ArrayList<Proposition> propositionButs;	  			// G
-	private ArrayList<Proposition> propositionButTerminees;		// R
+	private HashMap<String,Boolean> propositionVraies; 			// S
+	private HashMap<String,Boolean> propositionButs;	  			// G
+	private HashMap<String,Boolean> propositionButTerminees;		// R
 	
 	private ArrayList<Object> possession;
 
 	public Agent() {
 		super();
 		
-		this.propositionVraies = new ArrayList<Proposition>();
-		this.propositionButs = new ArrayList<Proposition>();
-		this.propositionButTerminees = new ArrayList<Proposition>();
+		this.propositionVraies = new HashMap<String,Boolean>();
+		this.propositionButs = new HashMap<String,Boolean>();
+		this.propositionButTerminees = new HashMap<String,Boolean>();
 		
 		this.possession = new ArrayList<Object>();
 	}
@@ -70,25 +71,25 @@ public class Agent {
 		return this.possession.contains(unObjet);
 	}
 	
-	public ArrayList<Proposition> S(){
+	public HashMap<String,Boolean> S(){
 		return propositionVraies;
 	}
 	
-	public ArrayList<Proposition> G(){
+	public HashMap<String,Boolean> G(){
 		return propositionButs;
 	}
 	
-	public ArrayList<Proposition> R(){
+	public HashMap<String,Boolean> R(){
 		return propositionButTerminees;
 	}
 
 	public String printState() {
 		String result = "State of the environnement : (";
-		for(Proposition uneProposition : S()) result = result + uneProposition.getNom() + " ";
+		for(String uneProposition : S().keySet()) result = result + uneProposition + " ";
 		result = result + ")\n goals of the environnement : (";
-		for(Proposition uneProposition : G()) result = result + uneProposition.getNom() + " ";
+		for(String uneProposition : G().keySet()) result = result + uneProposition + " ";
 		result = result + ")\n protected goals of the environment : (";
-		for(Proposition uneProposition : R()) result = result + uneProposition.getNom() + " ";
+		for(String uneProposition : R().keySet()) result = result + uneProposition + " ";
 		result = result + ")\n";
 		return result;
 	}
