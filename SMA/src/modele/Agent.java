@@ -27,6 +27,36 @@ public class Agent {
 	public HashMap<String,Boolean> R(){
 		return propositionButTerminees;
 	}
+	
+	public boolean addPropositionInitiale(String key, Boolean value) {
+		if(this.propositionVraies.containsKey(key)) {
+			return false;
+		}
+		else {
+			this.propositionVraies.put(key, value);
+			return true;
+		}
+	}
+	
+	public boolean addBut(String key, Boolean value) {
+		if(this.propositionButs.containsKey(key)) {
+			return false;
+		}
+		else {
+			this.propositionButs.put(key, value);
+			return true;
+		}
+	}
+	
+	public boolean addButTermine(String key, Boolean value) {
+		if(this.propositionButTerminees.containsKey(key)) {
+			return false;
+		}
+		else {
+			this.propositionButTerminees.put(key, value);
+			return true;
+		}
+	}
 
 	public String printState() {
 		String result = "State of the environnement : (";

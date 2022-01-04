@@ -9,7 +9,6 @@ public class Main {
 
 	public static void main(String[] args) {
 		// Initialisation 
-		Agent a = new Agent();
 		Environnement e = new Environnement(10, 10, 10, 10, 10);
 		
 		//Module without conflicts, adds or deletes
@@ -18,7 +17,8 @@ public class Main {
 		Module sprayer_somewhere = new Module((float) 5,"sprayer_somewhere");
 		Module operationnal = new Module((float) 5,"operationnal");
 		Module board_somewhere = new Module((float) 5,"board_somewhere");
-
+		
+		//State Goals
 		Module board_sanded = new Module((float) 5,"board_sanded");
 		Module self_painted = new Module((float) 5,"self_painted");
 		
@@ -92,14 +92,24 @@ public class Main {
 		place_board_in_vise.addAjoutes(board_in_vise.toString(), true);
 		place_board_in_vise.addDetruits(board_in_hand.toString(), true);
 		
-		//Début de la simulation
+		Agent a = new Agent();
+		a.addPropositionInitiale(hand_is_empty.toString(), true);
+		a.addPropositionInitiale(sander_somewhere.toString(), true);
+		a.addPropositionInitiale(sprayer_somewhere.toString(), true);
+		a.addPropositionInitiale(operationnal.toString(), true);
+		a.addPropositionInitiale(board_somewhere.toString(), true);
+		
+		a.addBut(board_sanded.toString(), true);
+		a.addBut(self_painted.toString(), true);
+		
+		//Dï¿½but de la simulation
 		int time = 1;
 		while(time < 10) {
 			System.out.println("TIME : " + time);
 			System.out.println(a.printState());
 			//Calcul des activations des modules
 			e.executable();
-			// Diffusion d'énergie d'activation
+			// Diffusion d'ï¿½nergie d'activation
 			e.updateEnergy();
 			//Si executable, Execution d'un module
 			Module executableModule = e.getModuleToExecute();
