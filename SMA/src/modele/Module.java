@@ -17,6 +17,7 @@ public class Module {
 
 	
 	private float seuilActivationALPHA;
+	private float futurSeuil = 0;
 	private String nom;
 	
 	public Module(float seuilActivationALPHA,String nom) {
@@ -165,6 +166,21 @@ public class Module {
 		this.seuilActivationALPHA = seuilActivationALPHA;
 	}
 	
+	public void ajouterAFuturSeuil(float seuilActivationALPHA) {
+		this.futurSeuil = this.futurSeuil + seuilActivationALPHA;
+	}
+	
+	public void enleverAFuturSeuil(float seuilActivationALPHA) {
+		this.futurSeuil = this.futurSeuil - seuilActivationALPHA;
+	}
+	
+	public void updateSeuil() {
+		this.seuilActivationALPHA += this.futurSeuil;
+		if(this.seuilActivationALPHA < 0) this.seuilActivationALPHA = 0;
+		this.futurSeuil = 0;
+	}
+
+	
 	public boolean isConditionOkey() {
 		for(boolean isTrue : this.conditions.values()) {
 			if(!isTrue) return false;
@@ -188,6 +204,10 @@ public class Module {
 	public String toString() {
 		// TODO Auto-generated method stub
 		return this.nom;
+	}
+	
+	public String activationDisplay() {
+		return "  niveau d'activation de " + this.nom + ": " + this.getSeuilActivationALPHA();
 	}
 	
 	

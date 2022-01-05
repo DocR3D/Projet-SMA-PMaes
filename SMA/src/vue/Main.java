@@ -31,70 +31,70 @@ public class Main {
 		Module pick_up_sprayer = new Module((float) 0,"pick_up_sprayer");
 		pick_up_sprayer.addCondition(sprayer_somewhere.toString(), true);
 		pick_up_sprayer.addCondition(hand_is_empty.toString(), true);
-		pick_up_sprayer.addAjoutes(sprayer_in_hand.toString(), true);
+		pick_up_sprayer.addAjoutes(sprayer_in_hand.toString(), false);
 		pick_up_sprayer.addDetruits(sprayer_somewhere.toString(), true);
 		pick_up_sprayer.addDetruits(hand_is_empty.toString(), true);
 		
 		Module pick_up_sander = new Module((float) 0,"pick_up_sander");
 		pick_up_sander.addCondition(sander_somewhere.toString(), true);
 		pick_up_sander.addCondition(hand_is_empty.toString(), true);
-		pick_up_sander.addAjoutes(sander_in_hand.toString(), true);
+		pick_up_sander.addAjoutes(sander_in_hand.toString(), false);
 		pick_up_sander.addDetruits(sander_somewhere.toString(), true);
 		pick_up_sander.addDetruits(hand_is_empty.toString(), true);
 		
 		Module pick_up_board = new Module((float) 0,"pick_up_board");
 		pick_up_board.addCondition(board_somewhere.toString(), true);
 		pick_up_board.addCondition(hand_is_empty.toString(), true);
-		pick_up_board.addAjoutes(board_in_hand.toString(), true);
+		pick_up_board.addAjoutes(board_in_hand.toString(), false);
 		pick_up_board.addDetruits(board_somewhere.toString(), true);
 		pick_up_board.addDetruits(hand_is_empty.toString(), true);
 		
 		Module put_down_sprayer = new Module((float) 0,"put_down_sprayer");
-		put_down_sprayer.addCondition(sprayer_in_hand.toString(), true);
+		put_down_sprayer.addCondition(sprayer_in_hand.toString(), false);
 		put_down_sprayer.addAjoutes(sprayer_somewhere.toString(), true);
 		put_down_sprayer.addAjoutes(hand_is_empty.toString(), true);
-		put_down_sprayer.addDetruits(sprayer_in_hand.toString(), true);
+		put_down_sprayer.addDetruits(sprayer_in_hand.toString(), false);
 		
 		Module put_down_sander = new Module((float) 0,"put_down_sander");
-		put_down_sander.addCondition(sander_in_hand.toString(), true);
+		put_down_sander.addCondition(sander_in_hand.toString(), false);
 		put_down_sander.addAjoutes(sander_somewhere.toString(), true);
 		put_down_sander.addAjoutes(hand_is_empty.toString(), true);
-		put_down_sander.addDetruits(sander_in_hand.toString(), true);
+		put_down_sander.addDetruits(sander_in_hand.toString(), false);
 		
 		Module put_down_board = new Module((float) 0,"put_down_board");
-		put_down_board.addCondition(board_in_hand.toString(), true);
+		put_down_board.addCondition(board_in_hand.toString(), false);
 		put_down_board.addAjoutes(board_somewhere.toString(), true);
 		put_down_board.addAjoutes(hand_is_empty.toString(), true);
-		put_down_board.addDetruits(board_in_hand.toString(), true);
+		put_down_board.addDetruits(board_in_hand.toString(), false);
 		
 		//deux fois le module pour check avec les deux mains, dans l'ex de pattie maes
 		Module sand_board_in_hand = new Module((float) 0,"sand_board_in_hand");
 		sand_board_in_hand.addCondition(operationnal.toString(), true);
-		sand_board_in_hand.addCondition(board_in_hand.toString(), true);
-		sand_board_in_hand.addCondition(sander_in_hand.toString(), true);
-		sand_board_in_hand.addAjoutes(board_sanded.toString(), true);
+		sand_board_in_hand.addCondition(board_in_hand.toString(), false);
+		sand_board_in_hand.addCondition(sander_in_hand.toString(), false);
+		sand_board_in_hand.addAjoutes(board_sanded.toString(), false);
 		
 		Module sand_board_in_vise = new Module((float) 0,"sand_board_in_vise");
 		sand_board_in_vise.addCondition(operationnal.toString(), true);
-		sand_board_in_vise.addCondition(board_in_vise.toString(), true);
-		sand_board_in_vise.addCondition(sander_in_hand.toString(), true);
-		sand_board_in_vise.addAjoutes(board_sanded.toString(), true);
+		sand_board_in_vise.addCondition(board_in_vise.toString(), false);
+		sand_board_in_vise.addCondition(sander_in_hand.toString(), false);
+		sand_board_in_vise.addAjoutes(board_sanded.toString(), false);
 		
 		Module spray_paint_self = new Module((float) 0,"spray_paint_self");
 		spray_paint_self.addCondition(operationnal.toString(), true);
-		spray_paint_self.addCondition(sprayer_in_hand.toString(), true);
-		spray_paint_self.addAjoutes(self_painted.toString(), true);
+		spray_paint_self.addCondition(sprayer_in_hand.toString(), false);
+		spray_paint_self.addAjoutes(self_painted.toString(), false);
 		spray_paint_self.addDetruits(operationnal.toString(), true);
 		
 		Module place_board_in_vise = new Module((float) 0,"place_board_in_vise");
-		place_board_in_vise.addCondition(board_in_hand.toString(), true);
+		place_board_in_vise.addCondition(board_in_hand.toString(), false);
 		place_board_in_vise.addAjoutes(hand_is_empty.toString(), true);
-		place_board_in_vise.addAjoutes(board_in_vise.toString(), true);
-		place_board_in_vise.addDetruits(board_in_hand.toString(), true);
+		place_board_in_vise.addAjoutes(board_in_vise.toString(), false);
+		place_board_in_vise.addDetruits(board_in_hand.toString(), false);
 		
 		Agent a = new Agent();
 		a.addPropositionInitiale(hand_is_empty.toString());
-		a.addPropositionInitiale(hand_is_empty.toString());
+		//a.addPropositionInitiale(hand_is_empty.toString()); //TODO : Decouvrir pourquoi deux mains font bugguer le programme. (au niveau de la propagation d'energy
 		a.addPropositionInitiale(sander_somewhere.toString());
 		a.addPropositionInitiale(sprayer_somewhere.toString());
 		a.addPropositionInitiale(operationnal.toString());
@@ -103,17 +103,19 @@ public class Main {
 		a.addBut(board_sanded.toString());
 		a.addBut(self_painted.toString());
 		
+		e.calculLinkBetweenModules();
 		//D�but de la simulation
 
-		while(Environnement.time < 2) {
+		while(Environnement.time < 20) {
 			System.out.println("TIME : " + Environnement.time);
 			System.out.println(a.printState());
 			//Calcul des activations des modules
 			e.executable();
 			// Diffusion d'�nergie d'activation
-			e.updateEnergyStateGoalAndGoalDone();
-			e.updateEnergyPropagation();
-			e.updateEnergyDecay();
+
+			
+			e.updateEnergy();
+
 			//Si executable, Execution d'un module
 			Module executableModule = e.getModuleToExecute();
 			if(executableModule != null) {
