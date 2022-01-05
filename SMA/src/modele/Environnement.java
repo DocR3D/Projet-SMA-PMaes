@@ -126,6 +126,7 @@ public class Environnement {
 
 	public void updateEnergyStateGoalAndGoalDone() {
 
+
 		for(String uneProposition : Agent.S()) {
 			for(Module unModule : Environnement.M(uneProposition)) {
 				System.out.println("L'environnement donne à " + unModule + " une valeur d'énergie égal à " + (energieInjecteePropositionVraiePHI* 1/Environnement.M(uneProposition).size() * 1/unModule.getSizeCondition()));
@@ -169,79 +170,33 @@ public class Environnement {
 			for(String uneProposition :  unModule.getDetruits().keySet())
 				if(!propositions.containsKey(uneProposition)) propositions.put(uneProposition,unModule.getAjoutes().get(uneProposition));
 		}
-
-		//EN ARRIERE
-		//Pour chaque proposition
-		for(String uneProposition : propositions.keySet()) {
-			if(Environnement.M(uneProposition) != null && Environnement.A(uneProposition) != null) {
-				for(Module unModuleX : Environnement.M(uneProposition)) {
-					for(Module unModuleY : Environnement.A(uneProposition)) {
-						//System.out.println(unModuleX.getConditions().get(uneProposition) +" et " + unModuleY.getAjoutes().get(uneProposition));
-						if(unModuleX.getConditions().get(uneProposition) == false && unModuleY.getAjoutes().get(uneProposition) == false ) {
-							System.out.println(unModuleX + " donne " + unModuleX.getSeuilActivationALPHA()*(time-1) * 1/Environnement.A(uneProposition).size()*1/unModuleY.getAjoutes().keySet().size() + " d'énergie en ARRIERE vers " + unModuleY + " pour la proposition " + uneProposition);
-							unModuleY.ajouterAFuturSeuil(unModuleX.getSeuilActivationALPHA()*(time-1) * 1/Environnement.A(uneProposition).size()*1/unModuleY.getAjoutes().keySet().size());
-							//System.out.println(unModuleX.getSeuilActivationALPHA() +" * " + (time-1) + " * " + 1/Environnement.A(uneProposition).size() + " * " + 1/unModuleY.getAjoutes().keySet().size());
-						}
-					}
-				}
-
-				// EN AVANT
-				for(Module unModuleX : Environnement.A(uneProposition)) {
-					for(Module unModuleY : Environnement.M(uneProposition)) {
-						//System.out.println(unModuleX.getConditions().get(uneProposition) +" et " + unModuleY.getAjoutes().get(uneProposition));
-						if(unModuleX.getAjoutes().get(uneProposition) == false && unModuleY.getConditions().get(uneProposition) == false ) {
-							System.out.println(unModuleX + " donne " + (unModuleX.getSeuilActivationALPHA()*(time-1)* energieInjecteePropositionVraiePHI/energieInjecteeSousButGAMMA * 1/Environnement.M(uneProposition).size()*1/unModuleY.getConditions().keySet().size())+ " d'énergie en AVANT vers " + unModuleY + " pour la proposition " + uneProposition);
-							unModuleY.ajouterAFuturSeuil(unModuleX.getSeuilActivationALPHA()*(time-1)* energieInjecteePropositionVraiePHI/energieInjecteeSousButGAMMA * 1/Environnement.M(uneProposition).size()*1/unModuleY.getConditions().keySet().size());
-							//System.out.println(unModuleX.getSeuilActivationALPHA() +" * " + (time-1) + " * " + 1/Environnement.A(uneProposition).size() + " * " + 1/unModuleY.getAjoutes().keySet().size());
-						}
-					}
-				}
-
-				//DECAY
-				/**
-				if(Environnement.M(uneProposition) != null && Environnement.U(uneProposition) != null) {
-					test1 :for(Module unModuleX : Environnement.M(uneProposition)) {
-					test2:	for(Module unModuleY : Environnement.U(uneProposition)) {
-						if(unModuleX == unModuleY) continue;
-							//System.out.println(unModuleX.getConditions().get(uneProposition) +" et " + unModuleY.getAjoutes().get(uneProposition));
-							if(unModuleX.getConditions().get(uneProposition) == true && unModuleY.getDetruits().get(uneProposition) == true ) {
-								if(unModuleX.getSeuilActivationALPHA()*(time-1) < unModuleY.getSeuilActivationALPHA()*(time-1)) {
-									ArrayList<Module> cy = Environnement.U(uneProposition);
-									ArrayList<Module> dx = Environnement.M(uneProposition);
-									for(Module unAutreModuleX : cy) {
-										for(Module unAutreModuleY : dx) {
-											if(unAutreModuleX == unAutreModuleY) continue;
-											if(unAutreModuleX.containCondition(uneProposition)&& unAutreModuleY.containDetruits(uneProposition)&&  Agent.S().contains(uneProposition)) {
-												unModuleY.ajouterAFuturSeuil(0); 
-												continue test2;
-											}
-										}
-									}
-
-								}
-								float max = unModuleX.getSeuilActivationALPHA()*(time-1)*energiePriseButProtegeDELTA/energieInjecteeSousButGAMMA*1/Environnement.U(uneProposition).size()*1/unModuleY.getDetruits().keySet().size(); 
-								if( max < unModuleY.getSeuilActivationALPHA()*(time-1)) {
-									max = unModuleY.getSeuilActivationALPHA(); 
-								} 
-
-								unModuleY.enleverAFuturSeuil(max);
-								System.out.println(unModuleX + " retires à " + unModuleY +" " + max + " en raison de " + uneProposition);
-							}
-						}
-					}
-				}*/
-				
-
-				
-				
-			}
-		}
 		for(int x = 0; x < this.listeModule.size(); x++)
 			for(int y = 0; y < this.listeModule.size(); y++) {
 				if(x == y ) continue;
 				for( String uneProposition : propositions.keySet()) {
 					Module mx = this.listeModule.get(x);
 					Module my = this.listeModule.get(y);
+					//En avant 
+					if(mx.containAjoutes(uneProposition) && mx.getAjoutes().get(uneProposition) == false 
+							&& my.containCondition(uneProposition) ) {
+						if(!this.listeModuleActivable.contains(mx)) {
+							System.out.println(mx + " donne " + (mx.getSeuilActivationALPHA()*(time-1)* energieInjecteePropositionVraiePHI/energieInjecteeSousButGAMMA * 1f/Environnement.M(uneProposition).size()*1f/my.getConditions().keySet().size())+ " d'énergie en AVANT vers " + my + " pour la proposition " + uneProposition);
+							System.out.println(mx.getSeuilActivationALPHA() + " * " + (time-1) + " * "  + energieInjecteePropositionVraiePHI/energieInjecteeSousButGAMMA + " * " + 1f +" / " +Environnement.M(uneProposition).size() + " * " + 1f +" / " +my.getConditions().keySet().size());
+							my.ajouterAFuturSeuil(mx.getSeuilActivationALPHA()*(time-1)* energieInjecteePropositionVraiePHI/energieInjecteeSousButGAMMA * 1f/Environnement.M(uneProposition).size()*1f/my.getConditions().keySet().size());
+						}
+					}
+
+					//En Arriere
+					//System.out.println(mx + " et " + my + " pour " + uneProposition + " est contenu dans mx ? " +mx.containCondition(uneProposition) + " est contenu dans my ? " + my.containAjoutes(uneProposition));
+					if(mx.containCondition(uneProposition) && my.containAjoutes(uneProposition) && my.getAjoutes().get(uneProposition) == false) {
+						if(!this.listeModuleActivable.contains(mx)) {
+
+							System.out.println(mx + " donne " + mx.getSeuilActivationALPHA()*(time-1) * 1/Environnement.A(uneProposition).size()*1/my.getAjoutes().keySet().size() + " d'énergie en ARRIERE vers " + my + " pour la proposition " + uneProposition);
+							my.ajouterAFuturSeuil(mx.getSeuilActivationALPHA()*(time-1) * 1/Environnement.A(uneProposition).size()*1/my.getAjoutes().keySet().size());
+						}
+					}
+
+					//Decay
 					if(mx.containCondition(uneProposition) && mx.getConditions().get(uneProposition) == true 
 							&& my.containDetruits(uneProposition) && my.getDetruits().get(uneProposition) == true) {
 						if(mx.getSeuilActivationALPHA()*(time-1) < my.getSeuilActivationALPHA()*(time-1) && Agent.S().contains(uneProposition) 
@@ -261,24 +216,9 @@ public class Environnement {
 							System.out.println(mx + " retire à " + my +" " + max + " en raison de " + uneProposition);
 						}
 					}
-					
+
 				}
 			}
-
-
-		/**for(String uneProposition : ajouts.keySet()) {
-			if(condition.containsKey(uneProposition)) {
-				for(Module unModule : Environnement.M(uneProposition)) {
-					if(unModule.getConditions().get(uneProposition) == false) {
-						//System.out.println(unModuleX + "donne de l'énergie en avant vers " + unModuleY + " pour la proposition " + uneProposition);
-
-						unModule.setSeuilActivationALPHA(unModule.getSeuilActivationALPHA() * energieInjecteePropositionVraiePHI/energieInjecteeSousButGAMMA);
-					}
-				}
-			}
-		}
-		 */
-
 
 	}
 

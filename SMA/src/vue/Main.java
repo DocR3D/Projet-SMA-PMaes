@@ -31,7 +31,7 @@ public class Main {
 		Module pick_up_sprayer = new Module((float) 0,"pick_up_sprayer");
 		pick_up_sprayer.addCondition("sprayer_somewhere", true);
 		pick_up_sprayer.addCondition("hand_is_empty", true);
-		pick_up_sprayer.addAjoutes("prayer_in_hand", false);
+		pick_up_sprayer.addAjoutes("sprayer_in_hand", false);
 		pick_up_sprayer.addDetruits("sprayer_somewhere", true);
 		pick_up_sprayer.addDetruits("hand_is_empty", true);
 		
@@ -91,10 +91,10 @@ public class Main {
 		place_board_in_vise.addAjoutes("hand_is_empty", true);
 		place_board_in_vise.addAjoutes("board_in_vise", false);
 		place_board_in_vise.addDetruits("board_in_hand", false);
-		
+		 
 		Agent a = new Agent();
 		a.addPropositionInitiale("hand_is_empty");
-		a.addPropositionInitiale("hand_is_empty");
+		//a.addPropositionInitiale("hand_is_empty");
 
 		//a.addPropositionInitiale(hand_is_empty.toString()); //TODO : Decouvrir pourquoi deux mains font bugguer le programme. (au niveau de la propagation d'energy
 		a.addPropositionInitiale("sander_somewhere");

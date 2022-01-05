@@ -191,7 +191,7 @@ public class Module {
 	public ArrayList<Module> getPred() {
 		return pred;
 	}
-
+ 
 	public ArrayList<Module> getSucc() {
 		return succ;
 	}
