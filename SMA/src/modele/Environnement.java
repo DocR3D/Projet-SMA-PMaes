@@ -181,7 +181,6 @@ public class Environnement {
 							&& my.containCondition(uneProposition) ) {
 						if(!this.listeModuleActivable.contains(mx)) {
 							System.out.println(mx + " donne " + (mx.getSeuilActivationALPHA()*(time-1)* energieInjecteePropositionVraiePHI/energieInjecteeSousButGAMMA * 1f/Environnement.M(uneProposition).size()*1f/my.getConditions().keySet().size())+ " d'énergie en AVANT vers " + my + " pour la proposition " + uneProposition);
-							System.out.println(mx.getSeuilActivationALPHA() + " * " + (time-1) + " * "  + energieInjecteePropositionVraiePHI/energieInjecteeSousButGAMMA + " * " + 1f +" / " +Environnement.M(uneProposition).size() + " * " + 1f +" / " +my.getConditions().keySet().size());
 							my.ajouterAFuturSeuil(mx.getSeuilActivationALPHA()*(time-1)* energieInjecteePropositionVraiePHI/energieInjecteeSousButGAMMA * 1f/Environnement.M(uneProposition).size()*1f/my.getConditions().keySet().size());
 						}
 					}

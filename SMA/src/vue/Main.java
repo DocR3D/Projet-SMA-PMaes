@@ -71,7 +71,7 @@ public class Main {
 		Module sand_board_in_hand = new Module((float) 0,"sand_board_in_hand");
 		sand_board_in_hand.addCondition("operationnal", true);
 		sand_board_in_hand.addCondition("board_in_hand", false);
-		sand_board_in_hand.addCondition("sander_in", false);
+		sand_board_in_hand.addCondition("sander_in_hand", false);
 		sand_board_in_hand.addAjoutes("board_sanded", false);
 		
 		Module sand_board_in_vise = new Module((float) 0,"sand_board_in_vise");
