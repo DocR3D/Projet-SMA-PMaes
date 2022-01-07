@@ -4,37 +4,37 @@ import java.util.ArrayList;
 
 public class Agent {
 
-	private static ArrayList<Proposition> propositionVraies; 			// S
-	private static ArrayList<Proposition> propositionButs;	  			// G
-	private static ArrayList<Proposition> propositionButTerminees;		// R
+	private  ArrayList<Proposition> propositionVraies; 			// S
+	private  ArrayList<Proposition> propositionButs;	  			// G
+	private  ArrayList<Proposition> propositionButTerminees;		// R
 
 	public Agent() {
 		super();
 
-		propositionVraies = new ArrayList<Proposition>();
-		propositionButs = new ArrayList<Proposition>();
-		propositionButTerminees = new ArrayList<Proposition>();
+		propositionVraies = new ArrayList<>();
+		propositionButs = new ArrayList<>();
+		propositionButTerminees = new ArrayList<>();
 	}
 
-	public static  ArrayList<Proposition> S(){
-		propositionVraies = new ArrayList<Proposition>();
+	public   ArrayList<Proposition> S(){
+		propositionVraies = new ArrayList<>();
 		for(Proposition uneProposition : Environnement.listeDesProposition) {
 			if(uneProposition.isTrue()) propositionVraies.add(uneProposition);
 		}
 		return propositionVraies;
 	}
 
-	public static  ArrayList<Proposition> G(){
+	public   ArrayList<Proposition> G(){
 		for(Proposition uneProposition : propositionButTerminees) {
 			if(!uneProposition.isTrue()) {
 				resetBut(uneProposition);
 			}
 		}
-		
+
 		return propositionButs;
 	}
 
-	public static  ArrayList<Proposition> R(){
+	public   ArrayList<Proposition> R(){
 		for(Proposition uneProposition : propositionButs) {
 			if(uneProposition.isTrue()) {
 				terminerBut(uneProposition);
@@ -54,12 +54,12 @@ public class Agent {
 		return propositionButTerminees.contains(uneProposition);
 	}
 
-	public static void terminerBut(Proposition uneProposition) {
+	public  void terminerBut(Proposition uneProposition) {
 		propositionButs.remove(uneProposition);
 		propositionButTerminees.add(uneProposition);
 	}
 
-	public static void resetBut(Proposition uneProposition) {
+	public  void resetBut(Proposition uneProposition) {
 		propositionButs.add(uneProposition);
 		propositionButTerminees.remove(uneProposition);
 	}

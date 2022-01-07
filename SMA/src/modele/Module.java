@@ -26,13 +26,13 @@ public class Module {
 		super();
 		this.seuilActivationALPHA = seuilActivationALPHA;
 
-		this.conditions = new ArrayList<Proposition>();
-		this.ajoutes = new ArrayList<Proposition>();
-		this.detruits = new ArrayList<Proposition>();
+		this.conditions = new ArrayList<>();
+		this.ajoutes = new ArrayList<>();
+		this.detruits = new ArrayList<>();
 
-		this.pred = new ArrayList<Module>();
-		this.succ = new ArrayList<Module>();
-		this.conf = new ArrayList<Module>();
+		this.pred = new ArrayList<>();
+		this.succ = new ArrayList<>();
+		this.conf = new ArrayList<>();
 
 		this.nom = nom;
 
@@ -168,9 +168,9 @@ public class Module {
 		futurSeuil += inputFromState;
 		futurSeuil += inputFromGoals;
 
-		futurSeuil -= this.takenAwayByProtectedGoals; 
+		futurSeuil -= this.takenAwayByProtectedGoals;
 		if(futurSeuil < 0) futurSeuil = 0;
-		futurSeuil -= this.takesAway; 
+		futurSeuil -= this.takesAway;
 		if(futurSeuil < 0) futurSeuil = 0;
 
 		futurSeuil += spreadsBackward;

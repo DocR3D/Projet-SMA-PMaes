@@ -1,12 +1,12 @@
 package modele;
 
 public class Proposition {
-	
+
 	String name;
 	boolean value;
 	int nbOccurence = 1;
-	
-	
+
+
 	public Proposition(String name, boolean value) {
 		super();
 		this.name = name;
@@ -14,7 +14,7 @@ public class Proposition {
 		this.nbOccurence = value ? 1 : 0;
 		Environnement.listeDesProposition.add(this);
 	}
-	
+
 	public Proposition(String name, boolean value, int nbOccurence) {
 		super();
 		this.name = name;
@@ -22,16 +22,16 @@ public class Proposition {
 		this.nbOccurence = nbOccurence;
 		Environnement.listeDesProposition.add(this);
 	}
-	
+
 	public void setFalse() {
 		if(nbOccurence == 1) {
 			value = false;
 			nbOccurence--;
 		}
 		else nbOccurence--;
-		
+
 	}
-	
+
 	public void setTrue() {
 		if(nbOccurence == 0) {
 			nbOccurence++;
@@ -39,7 +39,7 @@ public class Proposition {
 		}
 		else nbOccurence++;
 		}
-	
+
 	public boolean isTrue() {
 		return value;
 	}
@@ -48,9 +48,9 @@ public class Proposition {
 	public String toString() {
 		return this.name;
 	}
-	
-	
-	
-	
+
+
+
+
 
 }
