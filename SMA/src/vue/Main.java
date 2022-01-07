@@ -126,9 +126,8 @@ public class Main {
 			System.out.println(a.printState());
 			//Calcul des activations des modules
 			e.executable();
-			// Diffusion d'�nergie d'activation
+			// Diffusion d'énergie d'activation
 
-			
 			e.updateEnergy();
 
 			//Si executable, Execution d'un module
@@ -136,11 +135,9 @@ public class Main {
 			if(executableModule != null) {
 				executableModule.activateModule();
 			}
-			//Sinon diminution du seuil d'activation
 			e.updateTheta();
 			//e.afficherPropositions();
 			e.time++;
-			System.out.println("");
 		}
 		System.out.println("\nLes missions ont été terminés en " + e.time );
 		

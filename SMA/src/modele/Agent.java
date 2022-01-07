@@ -89,7 +89,7 @@ public class Agent {
 	}
 
 	public boolean isDone() {
-		for(Proposition uneProposition : this.propositionButs) if(!uneProposition.isTrue()) return false;
+		for(Proposition uneProposition : propositionButs) if(!uneProposition.isTrue()) return false;
 		return true;
 	}
 

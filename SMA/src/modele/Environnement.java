@@ -22,7 +22,8 @@ public class Environnement {
 	public static ArrayList<Proposition> listeDesProposition;
 
 	public int time = 1;
-
+	
+	
 
 	public Environnement(float niveauActivationPI, float seuilActivationTHETA, float energieInjecteeSousButGAMMA,
 			float energieInjecteePropositionVraiePHI, float energiePriseButProtegeDELTA) {

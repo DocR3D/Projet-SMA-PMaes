@@ -12,9 +12,6 @@ public class Module {
 	private ArrayList<Module> succ;
 	private ArrayList<Module> conf;
 
-
-
-
 	private float seuilActivationALPHA;
 	public float takenAwayByProtectedGoals = 0;
 	public float takesAway = 0;
