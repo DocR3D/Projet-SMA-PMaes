@@ -23,7 +23,7 @@ public class Module {
 	public float spreadsForward = 0;
 
 	private String nom;
-
+	
 	public Module(float seuilActivationALPHA,String nom) {
 		super();
 		this.seuilActivationALPHA = seuilActivationALPHA;

@@ -41,6 +41,8 @@ public class Environnement {
 		this.unAgent = a;
 		allTheTheta = new ArrayList<Float>();
 		allTheTheta.add(seuilActivationTHETA);
+		
+
 	}
 
 	public static void addModuleToListModule(Module unModule) {
@@ -100,6 +102,7 @@ public class Environnement {
 
 	//Si rien n'a été éxécuté, on met à jours theta
 	public void updateTheta() {
+		updateStatsProposition();
 		if(listeModuleActivable.size() == 0) {
 			this.seuilActivationTHETA = this.seuilActivationTHETA - this.seuilActivationTHETA/10; // On retire 10 pourcents
 			System.out.println("L'environnement diminue Theta de 10%, Theta = " + this.seuilActivationTHETA);
@@ -110,8 +113,6 @@ public class Environnement {
 		this.allTheTheta.add(this.seuilActivationTHETA);
 	}
 	public void updateEnergyStateGoalAndGoalDone(boolean afficherInformation) {
-
-
 		for(Proposition uneProposition : unAgent.S()) {
 			if(Environnement.M(uneProposition) != null)
 
@@ -142,21 +143,11 @@ public class Environnement {
 
 	public void updateEnergyPropagation(boolean afficherInformation) {
 		System.out.println();
-		ArrayList<Proposition> propositions = new ArrayList<>();
-
-		//On récupère toute les propositions
-		for(Module unModule : Environnement.listeModule) {
-			for(Proposition uneProposition :  unModule.getConditions())
-				if(!propositions.contains(uneProposition)) propositions.add(uneProposition);
-			for(Proposition uneProposition :  unModule.getAjoutes())
-				if(!propositions.contains(uneProposition)) propositions.add(uneProposition);
-			for(Proposition uneProposition :  unModule.getDetruits())
-				if(!propositions.contains(uneProposition)) propositions.add(uneProposition);
-		}
+		
 		for(int x = 0; x < listeModule.size(); x++)
 			for(int y = 0; y < listeModule.size(); y++) {
 				if(x == y ) continue;
-				for( Proposition uneProposition : propositions) {
+				for( Proposition uneProposition : listeDesProposition) {
 					Module mx = listeModule.get(x);
 					Module my = listeModule.get(y);
 					//En avant
@@ -229,7 +220,7 @@ public class Environnement {
 				unModule.setSeuilActivationALPHA(factor * unModule.getSeuilActivationALPHA());
 			}
 		}
-
+		
 		
 	}
 	public ArrayList<Module> getAllModules(){
@@ -257,6 +248,12 @@ public class Environnement {
 	}
 	public void ajouterProposition(Proposition uneProposition) {
 		listeDesProposition.add(uneProposition);
+	}
+	
+	public void updateStatsProposition() {
+		for(Proposition uneProposition : listeDesProposition) {
+			uneProposition.addEtat();
+		}
 	}
 	
 	public ArrayList<Float> getAllTheta() {

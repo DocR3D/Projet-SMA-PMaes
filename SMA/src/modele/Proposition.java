@@ -1,10 +1,13 @@
 package modele;
 
+import java.util.ArrayList;
+
 public class Proposition {
 
 	String name;
 	boolean value;
 	int nbOccurence = 1;
+	private ArrayList<Integer> whenIsEnable;
 
 
 	public Proposition(String name, boolean value) {
@@ -13,6 +16,7 @@ public class Proposition {
 		this.value = value;
 		this.nbOccurence = value ? 1 : 0;
 		Environnement.listeDesProposition.add(this);
+		whenIsEnable = new ArrayList<Integer>();
 	}
 
 	public Proposition(String name, boolean value, int nbOccurence) {
@@ -36,6 +40,7 @@ public class Proposition {
 		if(nbOccurence == 0) {
 			nbOccurence++;
 			value = true;
+			whenIsEnable.add(1);
 		}
 		else nbOccurence++;
 		}
@@ -47,6 +52,14 @@ public class Proposition {
 	@Override
 	public String toString() {
 		return this.name;
+	}
+	
+	public void addEtat() {
+		this.whenIsEnable.add(this.value ? 1 : 0);
+	}
+	
+	public ArrayList<Integer> getEtatStat(){
+		return this.whenIsEnable;
 	}
 
 

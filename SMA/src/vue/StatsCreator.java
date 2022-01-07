@@ -13,7 +13,9 @@ import org.knowm.xchart.BitmapEncoder.BitmapFormat;
 import org.knowm.xchart.XYChart;
 import org.knowm.xchart.XYChartBuilder;
 
+import modele.Environnement;
 import modele.Module;
+import modele.Proposition;
 
 public class StatsCreator {
 
@@ -90,6 +92,19 @@ public class StatsCreator {
 			e.printStackTrace();
 		}
 
+	}
+	
+	public void exportConditionEtat(String nomDuFichier) {
+		final XYChart chart = new XYChartBuilder().width(600).height(400).title("Seuils des modules").xAxisTitle("L'itération").yAxisTitle("Le seuil").build();
+		for(Proposition uneProposition : Environnement.listeDesProposition) {
+			chart.addSeries(uneProposition.toString(), uneProposition.getEtatStat());
+		}
+		try {
+			BitmapEncoder.saveBitmapWithDPI(chart, CHEMIN + nomDuFichier, BitmapFormat.PNG, 600);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 

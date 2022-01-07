@@ -123,6 +123,7 @@ public class Main {
 				System.out.println("\nLes missions ont été terminés en " + e.time );
 				sc.exportToExcel("test1.txt");
 				sc.exportToPng("Seuils4");
+				sc.exportConditionEtat("Proposition");
 	}
 	
 	public static void scenario() {
@@ -136,7 +137,7 @@ public class Main {
 		Proposition outil_quelque_part = new Proposition("outil_quelque_part", true);
 		Proposition partie1_du_meuble_quelque_part = new Proposition("partie1_du_meuble_quelquepart", false);
 		Proposition partie2_du_meuble_quelque_part = new Proposition("partie2_du_meuble_quelquepart", false);
-		Proposition meuble_final_quelque_part = new Proposition("porte_quelque_part", false);
+		Proposition meuble_final_quelque_part = new Proposition("meuble_quelque_part", false);
 		Proposition porte_quelque_part = new Proposition("porte_quelque_part", true);
 		
 		Proposition clef_dans_la_main = new Proposition("clef_dans_la_main", false);
@@ -326,7 +327,7 @@ public class Main {
 		while(!unAgent.isDone()) {
 		//while (cpt < 50) {
 			System.out.println("\n\nTIME : " + e.time);
-			//unAgent.printState();
+			unAgent.printState();
 			//Calcul des activations des modules
 			e.executable();
 			// Diffusion d'énergie d'activation
@@ -342,8 +343,10 @@ public class Main {
 			cpt++;
 		}
 		System.out.println("\nLes missions ont été terminés en " + e.time );
+		unAgent.printState();
 		sc.exportToExcel("test2.txt");
 		sc.exportToPng("Seuils5");
+		sc.exportConditionEtat("Proposition");
 		
 		
 		
