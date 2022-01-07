@@ -51,7 +51,7 @@ public class Environnement {
 			if(unModule.getSeuilActivationALPHA() > this.seuilActivationTHETA && unModule.isConditionOkey()) {
 				System.out.println("L'environnement peut executer celui de " + unModule + " qui a une activation de : " + unModule.getSeuilActivationALPHA());
 				Environnement.listeModuleActivable.add(unModule);
-			}
+			}else if(unModule.isConditionOkey()) System.out.println("L'environnement peut executer celui de " + unModule);
 		}
 	}
 
@@ -107,26 +107,6 @@ public class Environnement {
 			this.seuilActivationTHETA = this.defaultSeuilActivationTHETA;
 		}
 	}
-
-	public void updateEnergyWhenActivatingModule(Module m1) {
-		for(Module unModule : m1.getSucc()) {
-			System.out.println("L'environnement donne à " + unModule + " une valeur d'énergie égal à " + this.energieInjecteePropositionVraiePHI);
-			unModule.setSeuilActivationALPHA(unModule.getSeuilActivationALPHA() + this.energieInjecteePropositionVraiePHI);
-		}
-	}
-
-	public void updateEnergyWhenInactif(Module m1) {
-		for(Module unModule : m1.getPred()) {
-			unModule.setSeuilActivationALPHA(unModule.getSeuilActivationALPHA() + this.energieInjecteeSousButGAMMA);
-		}
-	}
-
-	public void updateEnergyOnConflit(Module m1) {
-		for(Module unModule : m1.getConf()) {
-			unModule.setSeuilActivationALPHA(unModule.getSeuilActivationALPHA() - this.energiePriseButProtegeDELTA);
-		}
-	}
-
 	public void updateEnergyStateGoalAndGoalDone() {
 
 
@@ -135,7 +115,7 @@ public class Environnement {
 
 				for(Module unModule : Environnement.M(uneProposition)) {
 					System.out.println("L'environnement donne à " + unModule + " une valeur d'énergie égal à " + (energieInjecteePropositionVraiePHI* 1/Environnement.M(uneProposition).size() * 1/unModule.getSizeCondition()));
-					unModule.ajouterAFuturSeuil(unModule.getSeuilActivationALPHA() + (energieInjecteePropositionVraiePHI* 1/Environnement.M(uneProposition).size() * 1/unModule.getSizeCondition()));
+					unModule.inputFromState += energieInjecteePropositionVraiePHI * 1/Environnement.M(uneProposition).size() * 1/unModule.getSizeCondition();
 					//System.out.println("La proposition était : " + uneProposition);
 					//System.out.println("Nouvel valeur de "+ unModule + " est " + unModule.getSeuilActivationALPHA());
 				}
@@ -146,7 +126,7 @@ public class Environnement {
 				for(Module unModule : Environnement.A(uneProposition)) {
 					System.out.println("Les buts donnent à " + unModule + " une valeur d'énergie égal à " + energieInjecteeSousButGAMMA * 1/Environnement.A(uneProposition).size() * 1.00f/unModule.getSizeAjoutes()); 
 					//unModule.setSeuilActivationALPHA(unModule.getSeuilActivationALPHA() +(float) (energieInjecteeSousButGAMMA * 1.0/Environnement.A(uneProposition).size() * 1.0/unModule.getSizeAjoutes()));
-					unModule.ajouterAFuturSeuil(unModule.getSeuilActivationALPHA() + energieInjecteeSousButGAMMA * 1/Environnement.A(uneProposition).size() * 1.00f/unModule.getSizeAjoutes());
+					unModule.inputFromGoals += energieInjecteeSousButGAMMA * 1/Environnement.A(uneProposition).size() * 1.00f/unModule.getSizeAjoutes();
 					//System.out.println("Nouvel valeur de "+ unModule + " est " + unModule.getSeuilActivationALPHA());
 
 				}
@@ -156,7 +136,7 @@ public class Environnement {
 				for(Module unModule : Environnement.U(uneProposition)) {
 					System.out.println("Les buts accomplit retirent à " + unModule + " une valeur d'énergie égal à " + (energiePriseButProtegeDELTA/Environnement.U(uneProposition).size() + 1/unModule.getNumberTrueDetruits() ));
 					//unModule.setSeuilActivationALPHA(unModule.getSeuilActivationALPHA() - (energiePriseButProtegeDELTA/Environnement.U(uneProposition).size() + 1/unModule.getNumberTrueDetruits()));
-					unModule.seuilParButProtege = energiePriseButProtegeDELTA/Environnement.U(uneProposition).size() + 1/unModule.getNumberTrueDetruits();
+					unModule.takenAwayByProtectedGoals = energiePriseButProtegeDELTA/Environnement.U(uneProposition).size() + 1/unModule.getNumberTrueDetruits();
 					//unModule.enleverAFuturSeuil((unModule.getSeuilActivationALPHA() - energiePriseButProtegeDELTA/Environnement.U(uneProposition).size() + 1/unModule.getNumberTrueDetruits()));
 					//System.out.println("Nouvel valeur de "+ unModule + " est " + unModule.getSeuilActivationALPHA());
 
@@ -188,8 +168,8 @@ public class Environnement {
 					if(mx.containAjoutes(uneProposition) && uneProposition.isTrue() == false 
 							&& my.containCondition(uneProposition) ) {
 						if(!this.listeModuleActivable.contains(mx)) {
-							System.out.println(mx + " donne " + (mx.getSeuilActivationALPHA()*(time-1)* energieInjecteePropositionVraiePHI/energieInjecteeSousButGAMMA * 1f/Environnement.M(uneProposition).size()*1f/my.getConditions().size())+ " d'énergie en AVANT vers " + my + " pour la proposition " + uneProposition);
-							my.ajouterAFuturSeuil(mx.getSeuilActivationALPHA()*(time-1)* energieInjecteePropositionVraiePHI/energieInjecteeSousButGAMMA * 1f/Environnement.M(uneProposition).size()*1f/my.getConditions().size());
+							System.out.println(mx + " donne " + (mx.getSeuilActivationALPHA()* energieInjecteePropositionVraiePHI/energieInjecteeSousButGAMMA * 1f/Environnement.M(uneProposition).size()*1f/my.getConditions().size())+ " d'énergie en AVANT vers " + my + " pour la proposition " + uneProposition);
+							my.spreadsForward += (mx.getSeuilActivationALPHA()*(time-1)* energieInjecteePropositionVraiePHI/energieInjecteeSousButGAMMA * 1f/Environnement.M(uneProposition).size()*1f/my.getConditions().size());
 						}
 					}
 
@@ -199,18 +179,23 @@ public class Environnement {
 						if(!this.listeModuleActivable.contains(mx)) {
 
 							System.out.println(mx + " donne " + mx.getSeuilActivationALPHA()*(time-1) * 1/Environnement.A(uneProposition).size()*1/my.getAjoutes().size() + " d'énergie en ARRIERE vers " + my + " pour la proposition " + uneProposition);
-							my.ajouterAFuturSeuil(mx.getSeuilActivationALPHA()*(time-1) * 1/Environnement.A(uneProposition).size()*1/my.getAjoutes().size());
+							my.spreadsBackward += mx.getSeuilActivationALPHA()*(time-1) * 1/Environnement.A(uneProposition).size()*1/my.getAjoutes().size();
 						}
 					}
 
 					//Decay
 					if(mx.containCondition(uneProposition) && uneProposition.isTrue() == true 
-							&& my.containDetruits(uneProposition) && uneProposition.isTrue() == true) {
-						if(mx.getSeuilActivationALPHA()*(time-1) < my.getSeuilActivationALPHA()*(time-1) && Agent.S().contains(uneProposition) 
+							&& my.containDetruits(uneProposition)) {
+						if(mx.getSeuilActivationALPHA()*(time-1) <= my.getSeuilActivationALPHA()*(time-1) && Agent.S().contains(uneProposition) 
 								&& my.getConditions().contains(uneProposition) && mx.getDetruits().contains(uneProposition)) {
-							my.enleverAFuturSeuil(0);
+								my.takesAway = 0;
 						}else {
-							if(uneProposition.name.equals("hand_is_empty")) continue; //TODO j'ai triché ici 
+
+							if(uneProposition.name.equals("hand_is_empty")) {
+								//System.out.println("\n\n\n\n" + mx + " vs " + my +" "+ mx.containCondition(uneProposition) +" et " + uneProposition.isTrue() +" et " + my.containDetruits(uneProposition)); 
+								//System.out.println( mx.getSeuilActivationALPHA()*(time-1)+ " < " + my.getSeuilActivationALPHA()*(time-1) +" et " + Agent.S().contains(uneProposition) +my.getConditions().contains(uneProposition) + mx.getDetruits().contains(uneProposition)  +"\n\n\n\n");
+								//continue; //TODO j'ai triché ici 
+							}
 							float max = mx.getSeuilActivationALPHA()*(time-1)*energiePriseButProtegeDELTA/energieInjecteeSousButGAMMA*1f/(Environnement.U(uneProposition).size())*1f/my.getDetruits().size(); 
 							//System.out.println( mx.getSeuilActivationALPHA()*(time-1)*energiePriseButProtegeDELTA/energieInjecteeSousButGAMMA*1f/(Environnement.U(uneProposition).size())*1f/my.getDetruits().keySet().size());
 
@@ -218,7 +203,7 @@ public class Environnement {
 								max = my.getSeuilActivationALPHA(); 
 							} 
 
-							my.seuilReduitParAutre = max;
+							my.takesAway += max;
 							//System.out.println(mx.getSeuilActivationALPHA() +" et " + my.getSeuilActivationALPHA());
 							System.out.println(mx + " retire à " + my +" " + max + " en raison de " + uneProposition);
 						}
@@ -243,7 +228,7 @@ public class Environnement {
 		float factor = this.niveauActivationPI / (sum/listeModule.size());
 		if(time >= 2 && sum != 0) {
 			for(Module unModule : listeModule) {				
-				unModule.setSeuilActivationALPHA(factor * unModule.getSeuilActivationALPHA());
+				unModule.setSeuilActivationALPHA((float) (factor * unModule.getSeuilActivationALPHA()));
 			} 
 		}
 

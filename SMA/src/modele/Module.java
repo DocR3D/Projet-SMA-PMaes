@@ -17,9 +17,13 @@ public class Module {
 
 	
 	private float seuilActivationALPHA;
-	public float seuilParButProtege = 0;
-	public float seuilReduitParAutre = 0;
-	private float futurSeuil = 0;
+	public float takenAwayByProtectedGoals = 0;
+	public float takesAway = 0;
+	public float inputFromGoals = 0;
+	public float inputFromState = 0;
+	public float spreadsBackward = 0;
+	public float spreadsForward = 0;
+
 	private String nom;
 	
 	public Module(float seuilActivationALPHA,String nom) {
@@ -46,7 +50,7 @@ public class Module {
 		//Change la valeur de toute les conditions pour tout les modules contenant la proposition
 		for(Proposition uneProposition : this.ajoutes) {
 			uneProposition.setTrue();
-			//Environnement.A(uneProposition).forEach(m -> m.getConditions());
+			
 			if(Agent.isInPropositionButs(uneProposition))
 				Agent.terminerBut(uneProposition);
 		}
@@ -61,8 +65,6 @@ public class Module {
 				Agent.resetBut(uneProposition);
 
 		}
-			
-		this.futurSeuil = 0;
 		this.seuilActivationALPHA = 0;
 	}
 	
@@ -172,21 +174,28 @@ public class Module {
 		this.seuilActivationALPHA = seuilActivationALPHA;
 	}
 	
-	public void ajouterAFuturSeuil(float seuilActivationALPHA) {
-		this.futurSeuil = this.futurSeuil + seuilActivationALPHA;
-	}
-	
-	public void enleverAFuturSeuil(float seuilActivationALPHA) {
-		this.futurSeuil = this.futurSeuil - seuilActivationALPHA;
-	}
-	
 	public void updateSeuil() {
-		this.seuilActivationALPHA += this.futurSeuil;
-		this.seuilActivationALPHA -= this.seuilParButProtege; 
-		if(this.seuilActivationALPHA < 0) this.seuilActivationALPHA = 0;
-		this.seuilActivationALPHA -= this.seuilReduitParAutre; 
-		if(this.seuilActivationALPHA < 0) this.seuilActivationALPHA = 0;
-		this.futurSeuil = 0;
+		float futurSeuil = this.seuilActivationALPHA;
+		futurSeuil += inputFromState;
+		futurSeuil += inputFromGoals;
+
+		futurSeuil -= this.takenAwayByProtectedGoals; 
+		if(futurSeuil < 0) futurSeuil = 0;
+		futurSeuil -= this.takesAway; 
+		if(futurSeuil < 0) futurSeuil = 0;
+		
+		futurSeuil += spreadsBackward;
+		futurSeuil += spreadsForward;
+		this.setSeuilActivationALPHA(futurSeuil);
+		
+		//System.out.println(this + " old value : " + this.seuilActivationALPHA + " state : " + inputFromState +" goal : " + inputFromGoals + " reduce this goal : " + takenAwayByProtectedGoals + " reduce takes away : " + takesAway + " forward  : " + spreadsForward + " backward : " +spreadsBackward  );
+		this.inputFromGoals = 0;
+		this.inputFromState = 0;
+		this.spreadsBackward = 0;
+		this.spreadsForward = 0;
+		this.takenAwayByProtectedGoals = 0;
+		this.takesAway = 0;
+		
 	}
 
 	

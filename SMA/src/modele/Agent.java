@@ -18,6 +18,10 @@ public class Agent {
 		}
 	
 	public static  ArrayList<Proposition> S(){
+		propositionVraies = new ArrayList<Proposition>();
+		for(Proposition uneProposition : Environnement.listeDesProposition) {
+			if(uneProposition.isTrue()) propositionVraies.add(uneProposition);
+		}
 		return propositionVraies;
 	}
 	
@@ -39,7 +43,7 @@ public class Agent {
 	public static boolean isInPropositionButTerminees(String uneProposition) {
 		return Agent.propositionButTerminees.contains(uneProposition);
 	}
-	
+		
 	public static void terminerBut(Proposition uneProposition) {
 		propositionButs.remove(uneProposition);
 		propositionButTerminees.add(uneProposition);
