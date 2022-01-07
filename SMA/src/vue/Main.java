@@ -12,7 +12,7 @@ public class Main {
 		// Initialisation
 		Agent unAgent = new Agent();
 
-		float niveauActivationPI = 20, seuilActivationTHETA=45,  energieInjecteeSousButGAMMA = 70,  energieInjecteePropositionVraiePHI = 20, energiePriseButProtegeDELTA = 50;
+		float niveauActivationPI = 20, seuilActivationTHETA=45,  energieInjecteeSousButGAMMA = 200,  energieInjecteePropositionVraiePHI = 20, energiePriseButProtegeDELTA = 50;
 		Environnement e = new Environnement(niveauActivationPI, seuilActivationTHETA, energieInjecteeSousButGAMMA, energieInjecteePropositionVraiePHI, energiePriseButProtegeDELTA,unAgent);
 
 		Proposition sprayer_somewhere = new Proposition("sprayer_somewhere", true);
@@ -123,7 +123,7 @@ public class Main {
 		}
 		System.out.println("\nLes missions ont été terminés en " + e.time );
 		sc.exportToExcel("test1.txt");
-		sc.exportToPng("Seuils");
+		sc.exportToPng("Seuils4");
 
 	}
 

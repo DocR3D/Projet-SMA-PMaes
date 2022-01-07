@@ -77,7 +77,7 @@ public class StatsCreator {
 	}
 
 	public void exportToPng(String nomDuFichier) {
-		final XYChart chart = new XYChartBuilder().width(600).height(400).title("Seuilles des modules").xAxisTitle("L'itération").yAxisTitle("Le seuil").build();
+		final XYChart chart = new XYChartBuilder().width(600).height(400).title("Seuils des modules").xAxisTitle("L'itération").yAxisTitle("Le seuil").build();
 		for(Module unModule : this.listeModulesSurGraph) {
 			chart.addSeries(unModule.toString(), unModule.getOldStats());
 		}

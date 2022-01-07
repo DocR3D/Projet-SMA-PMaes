@@ -25,20 +25,28 @@ public class Agent {
 	}
 
 	public   ArrayList<Proposition> G(){
+		ArrayList<Proposition> toDelete = new ArrayList<Proposition>();
+
 		for(Proposition uneProposition : propositionButTerminees) {
 			if(!uneProposition.isTrue()) {
-				resetBut(uneProposition);
+				toDelete.add(uneProposition);
 			}
 		}
-
+		for(Proposition uneProposition : toDelete) {
+			resetBut(uneProposition);
+		}
 		return propositionButs;
 	}
 
 	public   ArrayList<Proposition> R(){
+		ArrayList<Proposition> toDelete = new ArrayList<Proposition>();
 		for(Proposition uneProposition : propositionButs) {
 			if(uneProposition.isTrue()) {
-				terminerBut(uneProposition);
+				toDelete.add(uneProposition);
 			}
+		}
+		for(Proposition uneProposition : toDelete) {
+			terminerBut(uneProposition);
 		}
 		return propositionButTerminees;
 	}
