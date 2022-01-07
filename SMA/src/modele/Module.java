@@ -5,9 +5,9 @@ import java.util.HashMap;
 
 public class Module {
 
-	private HashMap<String, Boolean> conditions;
-	private HashMap<String, Boolean> ajoutes;
-	private HashMap<String, Boolean> detruits;
+	private ArrayList<Proposition> conditions;
+	private ArrayList<Proposition> ajoutes;
+	private ArrayList<Proposition> detruits;
 	
 	private ArrayList<Module> pred;
 	private ArrayList<Module> succ;
@@ -17,6 +17,8 @@ public class Module {
 
 	
 	private float seuilActivationALPHA;
+	public float seuilParButProtege = 0;
+	public float seuilReduitParAutre = 0;
 	private float futurSeuil = 0;
 	private String nom;
 	
@@ -24,9 +26,9 @@ public class Module {
 		super();
 		this.seuilActivationALPHA = seuilActivationALPHA;
 		
-		this.conditions = new HashMap<String, Boolean>();
-		this.ajoutes = new HashMap<String, Boolean>();
-		this.detruits = new HashMap<String, Boolean>();
+		this.conditions = new ArrayList<Proposition>();
+		this.ajoutes = new ArrayList<Proposition>();
+		this.detruits = new ArrayList<Proposition>();
 		
 		this.pred = new ArrayList<Module>();
 		this.succ = new ArrayList<Module>();
@@ -39,39 +41,43 @@ public class Module {
 	}
 	
 	public void activateModule() {
-		System.out.println("le module " + this + " est activ�");
+		System.out.println("le module " + this + " est active");
 		
 		//Change la valeur de toute les conditions pour tout les modules contenant la proposition
-		for(String uneProposition : this.ajoutes.keySet()) {
-			Environnement.A(uneProposition).forEach(m -> m.getConditions().put(uneProposition, true));
+		for(Proposition uneProposition : this.ajoutes) {
+			uneProposition.setTrue();
+			//Environnement.A(uneProposition).forEach(m -> m.getConditions());
 			if(Agent.isInPropositionButs(uneProposition))
 				Agent.terminerBut(uneProposition);
 		}
 		
 		//Change la valeur de toute les conditions pour tout les modules contenant la proposition
-		for(String uneProposition : this.detruits.keySet()) {
-			if(Environnement.A(uneProposition) != null )Environnement.A(uneProposition).forEach(m -> m.getConditions().put(uneProposition, false));
-			if(Environnement.M(uneProposition) != null ) Environnement.M(uneProposition).forEach(m -> m.getConditions().put(uneProposition, false));
+		for(Proposition uneProposition : this.detruits) {
+			uneProposition.setFalse();
+
+			//if(Environnement.A(uneProposition) != null )Environnement.A(uneProposition).forEach(m -> m.getConditions().put(uneProposition, false));
+			//if(Environnement.M(uneProposition) != null ) Environnement.M(uneProposition).forEach(m -> m.getConditions().put(uneProposition, false));
 			if(Agent.isInPropositionButs(uneProposition))
 				Agent.resetBut(uneProposition);
 
 		}
 			
+		this.futurSeuil = 0;
 		this.seuilActivationALPHA = 0;
 	}
 	
-	public boolean containCondition(String uneProposition) {
-		if(this.conditions.containsKey(uneProposition)) return true;
+	public boolean containCondition(Proposition uneProposition) {
+		if(this.conditions.contains(uneProposition)) return true;
 		else return false;
 	}
 	
-	public boolean containAjoutes(String uneProposition) {
-		if(this.ajoutes.containsKey(uneProposition)) return true;
+	public boolean containAjoutes(Proposition uneProposition) {
+		if(this.ajoutes.contains(uneProposition)) return true;
 		else return false;
 	}
 	
-	public boolean containDetruits(String uneProposition) {
-		if(this.detruits.containsKey(uneProposition)) return true;
+	public boolean containDetruits(Proposition uneProposition) {
+		if(this.detruits.contains(uneProposition)) return true;
 		else return false;
 	}
 	
@@ -87,75 +93,75 @@ public class Module {
 	
 	
 	
-	public boolean addCondition(String key, boolean value) {
-		if(this.conditions.containsKey(key)) {
+	public boolean addCondition(Proposition uneProposition) {
+		if(this.conditions.contains(uneProposition)) {
 			return false;
 		}
 		else {
-			this.conditions.put(key, value);
+			this.conditions.add(uneProposition);
 			return true;
 		}
 	}
 	
-	public boolean addAjoutes(String key, boolean value) {
-		if(this.ajoutes.containsKey(key)) {
+	public boolean addAjoutes(Proposition uneProposition) {
+		if(this.ajoutes.contains(uneProposition)) {
 			return false;
 		}
 		else {
-			this.ajoutes.put(key, value);
+			this.ajoutes.add(uneProposition);
 			return true;
 		}
 	}
 	
-	public boolean addDetruits(String key, boolean value) {
-		if(this.detruits.containsKey(key)) {
+	public boolean addDetruits(Proposition uneProposition) {
+		if(this.detruits.contains(uneProposition)) {
 			return false;
 		}
 		else {
-			this.detruits.put(key, value);
+			this.detruits.add(uneProposition);
 			return true;
 		}
 	}
 	
 	
-	public HashMap<String, Boolean> getConditions() {
+	public ArrayList<Proposition> getConditions() {
 		return conditions;
 	}
 
-	public HashMap<String, Boolean> getAjoutes() {
+	public ArrayList<Proposition> getAjoutes() {
 		return ajoutes;
 	}
 
-	public HashMap<String, Boolean> getDetruits() {
+	public ArrayList<Proposition> getDetruits() {
 		return detruits;
 	}
 
-	public float getSizeCondition() {
-		return this.conditions.values().size();
+	public int getSizeCondition() {
+		return this.conditions.size();
 	}
 	
-	public float getSizeAjoutes() {
-		return this.ajoutes.values().size();
+	public int getSizeAjoutes() {
+		return this.ajoutes.size();
 	}
 	
-	public float getSizeDetruits() {
-		return this.detruits.values().size();
+	public int getSizeDetruits() {
+		return this.detruits.size();
 	}
 	
 	public int getNumberTrueCondition() {
 		int i = 0;
-		for(Boolean uneCondition : this.conditions.values()) if(uneCondition) i++;
+		for(Proposition uneProposition : this.conditions) if(uneProposition.isTrue()) i++;
 		return i;
 	}
 	
 	public int getNumberTrueAjoutes() {
 		int i = 0;
-		for(Boolean uneCondition : this.ajoutes.values()) if(uneCondition) i++;
+		for(Proposition uneProposition: this.ajoutes) if(uneProposition.isTrue()) i++;
 		return i;	}
 	
 	public int getNumberTrueDetruits() {
 		int i = 0;
-		for(Boolean uneCondition : this.detruits.values()) if(uneCondition) i++;
+		for(Proposition uneProposition : this.detruits) if(uneProposition.isTrue()) i++;
 		return i;	}
 
 	public float getSeuilActivationALPHA() {
@@ -176,14 +182,17 @@ public class Module {
 	
 	public void updateSeuil() {
 		this.seuilActivationALPHA += this.futurSeuil;
+		this.seuilActivationALPHA -= this.seuilParButProtege; 
+		if(this.seuilActivationALPHA < 0) this.seuilActivationALPHA = 0;
+		this.seuilActivationALPHA -= this.seuilReduitParAutre; 
 		if(this.seuilActivationALPHA < 0) this.seuilActivationALPHA = 0;
 		this.futurSeuil = 0;
 	}
 
 	
 	public boolean isConditionOkey() {
-		for(boolean isTrue : this.conditions.values()) {
-			if(!isTrue) return false;
+		for(Proposition uneProposition : this.conditions) {
+			if(!uneProposition.isTrue()) return false;
 		}
 		return true;
 	}

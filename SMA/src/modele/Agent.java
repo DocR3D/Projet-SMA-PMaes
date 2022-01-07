@@ -5,31 +5,31 @@ import java.util.HashMap;
 
 public class Agent {
 
-	private static ArrayList<String> propositionVraies; 			// S
-	private static ArrayList<String> propositionButs;	  			// G
-	private static ArrayList<String> propositionButTerminees;		// R
+	private static ArrayList<Proposition> propositionVraies; 			// S
+	private static ArrayList<Proposition> propositionButs;	  			// G
+	private static ArrayList<Proposition> propositionButTerminees;		// R
 	
 	public Agent() {
 		super();
 		
-		Agent.propositionVraies = new ArrayList<String>();
-		Agent.propositionButs = new ArrayList<String>();
-		Agent.propositionButTerminees = new ArrayList<String>();
+		Agent.propositionVraies = new ArrayList<Proposition>();
+		Agent.propositionButs = new ArrayList<Proposition>();
+		Agent.propositionButTerminees = new ArrayList<Proposition>();
 		}
 	
-	public static  ArrayList<String> S(){
+	public static  ArrayList<Proposition> S(){
 		return propositionVraies;
 	}
 	
-	public static  ArrayList<String> G(){
+	public static  ArrayList<Proposition> G(){
 		return propositionButs;
 	}
 	
-	public static  ArrayList<String> R(){
+	public static  ArrayList<Proposition> R(){
 		return propositionButTerminees;
 	}
 	
-	public static boolean isInPropositionButs(String uneProposition) {
+	public static boolean isInPropositionButs(Proposition uneProposition) {
 		return Agent.propositionButs.contains(uneProposition);
 	}
 	
@@ -40,40 +40,44 @@ public class Agent {
 		return Agent.propositionButTerminees.contains(uneProposition);
 	}
 	
-	public static void terminerBut(String uneProposition) {
+	public static void terminerBut(Proposition uneProposition) {
 		propositionButs.remove(uneProposition);
 		propositionButTerminees.add(uneProposition);
 	}
 	
-	public static void resetBut(String uneProposition) {
+	public static void resetBut(Proposition uneProposition) {
 		propositionButs.add(uneProposition);
 		propositionButTerminees.remove(uneProposition);
 	}
 	
 	
-	public void addPropositionInitiale(String key) {
+	public void addPropositionInitiale(Proposition key) {
 			Agent.propositionVraies.add(key);
 	}
 	
-	public void addBut(String key) {
+	public void addBut(Proposition key) {
 		Agent.propositionButs.add(key);
 	}
 	
-	public void addButTermine(String key) {
+	public void addButTermine(Proposition key) {
 		Agent.propositionButTerminees.add(key);
 	}
 
 	public String printState() {
 		String result = "State of the environnement : (";
-		for(String uneProposition : S()) result = result + uneProposition + " ";
+		for(Proposition uneProposition : S()) result = result + uneProposition + " ";
 		result = result + ")\n goals of the environnement : (";
-		for(String uneProposition : G()) result = result + uneProposition + " ";
+		for(Proposition uneProposition : G()) result = result + uneProposition + " ";
 		result = result + ")\n protected goals of the environment : (";
-		for(String uneProposition : R()) result = result + uneProposition + " ";
+		for(Proposition uneProposition : R()) result = result + uneProposition + " ";
 		result = result + ")\n";
 		return result;
 	}
 	
+	public boolean isDone() {
+		for(Proposition uneProposition : this.propositionButs) if(!uneProposition.isTrue()) return false;
+		return true;
+	}
 	
 	
 }
