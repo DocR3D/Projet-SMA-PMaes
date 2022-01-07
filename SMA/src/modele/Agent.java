@@ -77,15 +77,17 @@ public class Agent {
 		propositionButTerminees.add(key);
 	}
 
-	public String printState() {
+	public void printState() {
 		String result = "State of the environnement : (";
-		for(Proposition uneProposition : S()) result = result + uneProposition + " ";
+		for(Proposition uneProposition : S()) {
+			for(int i = 0; i < uneProposition.nbOccurence ; i++) result = result + uneProposition + " ";
+		}
 		result = result + ")\n goals of the environnement : (";
 		for(Proposition uneProposition : G()) result = result + uneProposition + " ";
 		result = result + ")\n protected goals of the environment : (";
 		for(Proposition uneProposition : R()) result = result + uneProposition + " ";
 		result = result + ")\n";
-		return result;
+		System.out.println(result);
 	}
 
 	public boolean isDone() {

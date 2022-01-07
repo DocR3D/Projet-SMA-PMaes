@@ -11,6 +11,8 @@ public class Module {
 	private ArrayList<Module> pred;
 	private ArrayList<Module> succ;
 	private ArrayList<Module> conf;
+	
+	public ArrayList<Float> oldStats;
 
 	private float seuilActivationALPHA;
 	public float takenAwayByProtectedGoals = 0;
@@ -35,6 +37,8 @@ public class Module {
 		this.conf = new ArrayList<>();
 
 		this.nom = nom;
+		oldStats = new ArrayList<Float>();
+		oldStats.add(seuilActivationALPHA);
 
 
 		Environnement.addModuleToListModule(this);
@@ -158,6 +162,10 @@ public class Module {
 	public float getSeuilActivationALPHA() {
 		return seuilActivationALPHA;
 	}
+	
+	public ArrayList<Float> getOldStats(){
+		return this.oldStats;
+	}
 
 	public void setSeuilActivationALPHA(float seuilActivationALPHA) {
 		this.seuilActivationALPHA = seuilActivationALPHA;
@@ -183,7 +191,7 @@ public class Module {
 		this.spreadsForward = 0;
 		this.takenAwayByProtectedGoals = 0;
 		this.takesAway = 0;
-
+		oldStats.add(seuilActivationALPHA);
 	}
 
 

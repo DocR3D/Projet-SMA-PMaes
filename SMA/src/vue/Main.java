@@ -12,8 +12,8 @@ public class Main {
 		// Initialisation
 		Agent unAgent = new Agent();
 
-		//float niveauActivationPI, float seuilActivationTHETA, float energieInjecteeSousButGAMMA, float energieInjecteePropositionVraiePHI, float energiePriseButProtegeDELTA
-		Environnement e = new Environnement(20f, 45f, 70, 20, 50,unAgent);
+		float niveauActivationPI = 20, seuilActivationTHETA=45,  energieInjecteeSousButGAMMA = 70,  energieInjecteePropositionVraiePHI = 20, energiePriseButProtegeDELTA = 50;
+		Environnement e = new Environnement(niveauActivationPI, seuilActivationTHETA, energieInjecteeSousButGAMMA, energieInjecteePropositionVraiePHI, energiePriseButProtegeDELTA,unAgent);
 
 		Proposition sprayer_somewhere = new Proposition("sprayer_somewhere", true);
 		Proposition hand_is_empty = new Proposition("hand_is_empty", true,2);
@@ -103,25 +103,27 @@ public class Main {
 
 		e.calculLinkBetweenModules();
 		//D�but de la simulation
+		StatsCreator sc = new StatsCreator(e.getAllModules(),e.getAllTheta());
 
 		while(!unAgent.isDone()) {
-			System.out.println("TIME : " + e.time);
-			System.out.println(unAgent.printState());
+			System.out.println("\n\nTIME : " + e.time);
+			//unAgent.printState();
 			//Calcul des activations des modules
 			e.executable();
 			// Diffusion d'énergie d'activation
 
-			e.updateEnergy();
+			e.updateEnergy(false);
+			
+			//e.afficherEtatActivation();
 
 			//Si executable, Execution d'un module
-			Module executableModule = e.getModuleToExecute();
-			if(executableModule != null) {
-				executableModule.activateModule();
-			}
+			e.execute();
 			e.updateTheta();
 			e.time++;
 		}
 		System.out.println("\nLes missions ont été terminés en " + e.time );
+		sc.exportToExcel("test1.txt");
+		sc.exportToPng("Seuils");
 
 	}
 

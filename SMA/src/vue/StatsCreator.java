@@ -1,29 +1,97 @@
 package vue;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 
 import org.knowm.xchart.BitmapEncoder;
 import org.knowm.xchart.BitmapEncoder.BitmapFormat;
-import org.knowm.xchart.QuickChart;
-import org.knowm.xchart.SwingWrapper;
 import org.knowm.xchart.XYChart;
+import org.knowm.xchart.XYChartBuilder;
+
+import modele.Module;
 
 public class StatsCreator {
 
-    public static void main(String[] args) throws IOException {
-    	double[] xData = new double[] { 0.0, 1.0, 2.0 };
-    	double[] yData = new double[] { 2.0, 1.0, 0.0 };
+	String CHEMIN = "./graphs/";
+	String FILE = CHEMIN + "output";
+	ArrayList<Float> seuil;
 
-    	// Create Chart
-    	XYChart chart = QuickChart.getChart("Sample Chart", "X", "Y", "y(x)", xData, yData);
+	ArrayList<Module> listeModulesSurGraph;
 
-    	// Show it
-    	new SwingWrapper(chart).displayChart();
 
-    	// Save it
-    	BitmapEncoder.saveBitmap(chart, "./Sample_Chart", BitmapFormat.PNG);
+	public StatsCreator() {
+		super();
+		this.listeModulesSurGraph = new ArrayList<Module>();
+	}
 
-    	// or save it in high-res
-    	BitmapEncoder.saveBitmapWithDPI(chart, "./Sample_Chart_300_DPI", BitmapFormat.PNG, 300);
-    }
+	public StatsCreator(ArrayList<Module> lesModules, ArrayList<Float> Seuil) {
+		super();
+		this.listeModulesSurGraph = lesModules;
+		this.seuil = Seuil;
+	}
+
+
+	public void addModule(Module unModule) {
+		this.listeModulesSurGraph.add(unModule);
+	}
+
+	public void exportToExcel(String nomDuFichier){
+		File file = new File(CHEMIN + nomDuFichier);
+
+		try {
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+			FileWriter fw = new FileWriter(file.getAbsoluteFile());
+
+			String result = "";
+
+			for(Module unModule : this.listeModulesSurGraph) {
+
+				result = unModule + " : ";
+				for(Float uneValeure : unModule.getOldStats()) {
+					result = result + uneValeure + ", "; 
+				}
+				fw.write(result + "\n");
+			}
+			result = "Seuil : ";
+			for(Float uneValeure : seuil) {
+				result = result + uneValeure + ", "; 
+			}
+			fw.write(result + "\n");
+
+			fw.close();
+
+		} catch (FileNotFoundException | UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public void exportToPng(String nomDuFichier) {
+		final XYChart chart = new XYChartBuilder().width(600).height(400).title("Seuilles des modules").xAxisTitle("L'itération").yAxisTitle("Le seuil").build();
+		for(Module unModule : this.listeModulesSurGraph) {
+			chart.addSeries(unModule.toString(), unModule.getOldStats());
+		}
+		chart.addSeries("seuil", this.seuil);
+
+		try {
+			BitmapEncoder.saveBitmapWithDPI(chart, CHEMIN + nomDuFichier, BitmapFormat.PNG, 600);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+
+
 }
