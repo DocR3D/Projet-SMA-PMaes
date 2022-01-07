@@ -135,8 +135,8 @@ public class Main {
 		
 		Proposition clef_quelque_part = new Proposition("clef_quelquepart", true);
 		Proposition outil_quelque_part = new Proposition("outil_quelque_part", true);
-		Proposition partie1_du_meuble_quelque_part = new Proposition("partie1_du_meuble_quelquepart", false);
-		Proposition partie2_du_meuble_quelque_part = new Proposition("partie2_du_meuble_quelquepart", false);
+		Proposition partie1_du_meuble_quelque_part = new Proposition("partie1_du_meuble_quelquepart", true);
+		Proposition partie2_du_meuble_quelque_part = new Proposition("partie2_du_meuble_quelquepart", true);
 		Proposition meuble_final_quelque_part = new Proposition("meuble_quelque_part", false);
 		Proposition porte_quelque_part = new Proposition("porte_quelque_part", true);
 		
@@ -343,7 +343,6 @@ public class Main {
 			cpt++;
 		}
 		System.out.println("\nLes missions ont été terminés en " + e.time );
-		unAgent.printState();
 		sc.exportToExcel("test2.txt");
 		sc.exportToPng("Seuils5");
 		sc.exportConditionEtat("Proposition");
@@ -353,7 +352,7 @@ public class Main {
 	}
 
 	public static void main(String[] args) {
-		Maes();
+		scenario();
 
 	}
 

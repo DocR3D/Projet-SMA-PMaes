@@ -27,19 +27,6 @@ public class Agent {
 	public   ArrayList<Proposition> G(){
 		ArrayList<Proposition> toDelete = new ArrayList<Proposition>();
 
-		for(Proposition uneProposition : propositionButTerminees) {
-			if(!uneProposition.isTrue()) {
-				toDelete.add(uneProposition);
-			}
-		}
-		for(Proposition uneProposition : toDelete) {
-			resetBut(uneProposition);
-		}
-		return propositionButs;
-	}
-
-	public   ArrayList<Proposition> R(){
-		ArrayList<Proposition> toDelete = new ArrayList<Proposition>();
 		for(Proposition uneProposition : propositionButs) {
 			if(uneProposition.isTrue()) {
 				toDelete.add(uneProposition);
@@ -47,6 +34,19 @@ public class Agent {
 		}
 		for(Proposition uneProposition : toDelete) {
 			terminerBut(uneProposition);
+		}
+		return propositionButs;
+	}
+
+	public   ArrayList<Proposition> R(){
+		ArrayList<Proposition> toDelete = new ArrayList<Proposition>();
+		for(Proposition uneProposition : propositionButTerminees) {
+			if(!uneProposition.isTrue()) {
+				toDelete.add(uneProposition);
+			}
+		}
+		for(Proposition uneProposition : toDelete) {
+			resetBut(uneProposition);
 		}
 		return propositionButTerminees;
 	}
@@ -87,9 +87,7 @@ public class Agent {
 
 	public void printState() {
 		String result = "State of the environnement : (";
-		for(Proposition uneProposition : S()) {
-			for(int i = 0; i < uneProposition.nbOccurence ; i++) result = result + uneProposition + " ";
-		}
+		for(Proposition uneProposition : S()) for(int i = 0; i < uneProposition.nbOccurence ; i++) result = result + uneProposition + " ";
 		result = result + ")\n goals of the environnement : (";
 		for(Proposition uneProposition : G()) result = result + uneProposition + " ";
 		result = result + ")\n protected goals of the environment : (";
