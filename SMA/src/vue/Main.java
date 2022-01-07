@@ -27,7 +27,6 @@ public class Main {
 				Proposition self_painted = new Proposition("self_painted", false);
 				Proposition board_sanded = new Proposition("board_sanded", false);
 
-
 				Module pick_up_sprayer = new Module(0,"pick_up_sprayer");
 				pick_up_sprayer.addCondition(sprayer_somewhere);
 				pick_up_sprayer.addCondition(hand_is_empty);
@@ -126,110 +125,206 @@ public class Main {
 				sc.exportToPng("Seuils4");
 	}
 	
-	public void scenario() {
+	public static void scenario() {
 		float niveauActivationPI = 100, seuilActivationTHETA=20,  energieInjecteeSousButGAMMA = 80,  energieInjecteePropositionVraiePHI = 5, energiePriseButProtegeDELTA = 50;
 		Agent unAgent = new Agent();
 
 		Environnement e = new Environnement(niveauActivationPI, seuilActivationTHETA, energieInjecteeSousButGAMMA, energieInjecteePropositionVraiePHI, energiePriseButProtegeDELTA,unAgent);
 		StatsCreator sc = new StatsCreator(e.getAllModules(),e.getAllTheta());
 		
-		Proposition clef_quelquepart = new Proposition("clef_quelquepart", true);
-		Proposition clef_dans_la_main = new Proposition("clef_dans_la_main", false,2);
-		Proposition etre_proche_de_la_clef = new Proposition("etre_proche_de_la_clef", false);
-		Proposition porte_est_ferme = new Proposition("porte_est_ferme", true);
-		Proposition porte_est_ouverte = new Proposition("porte_est_ouverte", false);
-		Proposition meuble_non_assemble = new Proposition("meuble_non_assemble", true);
-		Proposition meuble_est_assemble = new Proposition("meuble_est_assemble", false);
-		Proposition partie1_du_meuble_quelquepart = new Proposition("partie1_du_meuble_quelquepart", true);
+		Proposition clef_quelque_part = new Proposition("clef_quelquepart", true);
+		Proposition outil_quelque_part = new Proposition("outil_quelque_part", true);
+		Proposition partie1_du_meuble_quelque_part = new Proposition("partie1_du_meuble_quelquepart", false);
+		Proposition partie2_du_meuble_quelque_part = new Proposition("partie2_du_meuble_quelquepart", false);
+		Proposition meuble_final_quelque_part = new Proposition("porte_quelque_part", false);
+		Proposition porte_quelque_part = new Proposition("porte_quelque_part", true);
+		
+		Proposition clef_dans_la_main = new Proposition("clef_dans_la_main", false);
+		Proposition outil_dans_la_main = new Proposition("outil_dans_la_main", false);
 		Proposition partie1_du_meuble_dans_la_main = new Proposition("partie1_du_meuble_dans_la_main", false);
+		Proposition partie2_du_meuble_dans_la_main = new Proposition("partie2_du_meuble_dans_la_main", false);
+		
+		Proposition etre_proche_de_la_clef = new Proposition("etre_proche_de_la_clef", false);
+		Proposition etre_proche_de_outil = new Proposition("etre_proche_de_outil", false);
 		Proposition etre_proche_de_partie1 = new Proposition("etre_proche_de_partie1", false);
 		Proposition etre_proche_de_partie2 = new Proposition("etre_proche_de_partie2", false);
-		Proposition partie2_du_meuble_quelquepart = new Proposition("partie2_du_meuble_quelquepart", true);
-		Proposition partie2_du_meuble_dans_la_main = new Proposition("partie2_du_meuble_dans_la_main", false);
-		Proposition A_Cherche_Clef = new Proposition("A_Cherche_Clef", false);
-		Proposition A_Cherche_partie1 = new Proposition("A_Cherche_partie1", false);
-		Proposition A_Cherche_partie2 = new Proposition("A_Cherche_partie2", false);
+		Proposition etre_proche_de_porte = new Proposition("etre_proche_de_porte", false);
+		Proposition etre_proche_de_meuble_final = new Proposition("etre_proche_de_meuble_final", false);
 		
-		Module ouvrir_porte = new Module(0,"pick_up_sprayer");
-		ouvrir_porte.addCondition(clef_dans_la_main);
+		Proposition porte_est_ferme = new Proposition("porte_est_ferme", true);
+		Proposition porte_est_ouverte = new Proposition("porte_est_ouverte", false);
+		Proposition porte_est_verouille = new Proposition("porte_est_verouille", true);
+		Proposition porte_est_deverouille = new Proposition("porte_est_deverouille", false);
+		Proposition meuble_non_assemble = new Proposition("meuble_non_assemble", true);
+		Proposition meuble_est_assemble = new Proposition("meuble_est_assemble", false);
+		
+		//Proposition A_Cherche_Clef = new Proposition("A_Cherche_Clef", false);
+		//Proposition A_Cherche_partie1 = new Proposition("A_Cherche_partie1", false);
+		//Proposition A_Cherche_partie2 = new Proposition("A_Cherche_partie2", false);
+		
+		//================================================
+		//===prendre - poser
+		//================================================
+		Module prendre_partie_1 = new Module(0,"prendre_partie_1");
+		prendre_partie_1.addCondition(partie1_du_meuble_quelque_part);
+		prendre_partie_1.addCondition(etre_proche_de_partie1);
+		prendre_partie_1.addAjoutes(partie1_du_meuble_dans_la_main);
+		prendre_partie_1.addCondition(porte_est_ouverte);
+		prendre_partie_1.addDetruits(partie1_du_meuble_quelque_part);
+		prendre_partie_1.addDetruits(etre_proche_de_partie1);
+		
+		Module prendre_partie_2 = new Module(0,"prendre_partie_2");
+		prendre_partie_2.addCondition(partie2_du_meuble_quelque_part);
+		prendre_partie_2.addCondition(etre_proche_de_partie2);
+		prendre_partie_2.addCondition(porte_est_ouverte);
+		prendre_partie_2.addAjoutes(partie2_du_meuble_dans_la_main);
+		prendre_partie_2.addDetruits(partie2_du_meuble_quelque_part);
+		prendre_partie_2.addDetruits(etre_proche_de_partie2);
+		
+		Module prendre_outil = new Module(0,"prendre_outil");
+		prendre_outil.addCondition(outil_quelque_part);
+		prendre_outil.addCondition(etre_proche_de_outil);
+		prendre_outil.addAjoutes(outil_dans_la_main);
+		prendre_outil.addDetruits(outil_quelque_part);
+		prendre_outil.addDetruits(etre_proche_de_outil);
+		
+		Module prendre_clef = new Module(0,"prendre_clef");
+		prendre_clef.addCondition(clef_quelque_part);
+		prendre_clef.addCondition(etre_proche_de_la_clef);
+		prendre_clef.addAjoutes(clef_dans_la_main);
+		prendre_clef.addDetruits(clef_quelque_part);
+		prendre_clef.addDetruits(etre_proche_de_la_clef);
+		
+		Module poser_partie_1 = new Module(0,"poser_partie_1");
+		poser_partie_1.addCondition(partie1_du_meuble_dans_la_main);
+		poser_partie_1.addAjoutes(partie1_du_meuble_quelque_part);
+		poser_partie_1.addAjoutes(etre_proche_de_partie1);
+		poser_partie_1.addDetruits(partie1_du_meuble_dans_la_main);
+		
+		Module poser_partie_2 = new Module(0,"poser_partie_2");
+		poser_partie_2.addCondition(partie2_du_meuble_dans_la_main);
+		poser_partie_2.addAjoutes(partie2_du_meuble_quelque_part);
+		poser_partie_2.addAjoutes(etre_proche_de_partie2);
+		poser_partie_2.addDetruits(partie2_du_meuble_dans_la_main);
+		
+		Module poser_outil = new Module(0,"poser_outil");
+		poser_outil.addCondition(outil_dans_la_main);
+		poser_outil.addAjoutes(outil_quelque_part);
+		poser_outil.addAjoutes(etre_proche_de_outil);
+		poser_outil.addDetruits(outil_dans_la_main);
+		
+		Module poser_clef = new Module(0,"poser_clef");
+		poser_clef.addCondition(clef_dans_la_main);
+		poser_clef.addAjoutes(clef_quelque_part);
+		poser_clef.addAjoutes(etre_proche_de_la_clef);
+		poser_clef.addDetruits(clef_dans_la_main);
+		//================================================
+		//===porte
+		//================================================
+		Module deverouiller_porte = new Module(0, "deverouiller_porte");
+		deverouiller_porte.addCondition(clef_dans_la_main);
+		deverouiller_porte.addCondition(etre_proche_de_porte);
+		deverouiller_porte.addCondition(porte_est_verouille);
+		deverouiller_porte.addAjoutes(porte_est_deverouille);
+		deverouiller_porte.addDetruits(porte_est_verouille);
+		
+		Module verouiller_porte = new Module(0, "verouiller_porte");
+		verouiller_porte.addCondition(clef_dans_la_main);
+		verouiller_porte.addCondition(etre_proche_de_porte);
+		verouiller_porte.addCondition(porte_est_deverouille);
+		verouiller_porte.addAjoutes(porte_est_verouille);
+		verouiller_porte.addDetruits(porte_est_deverouille);
+		
+		Module ouvrir_porte = new Module(0, "ouvrir_porte");
+		ouvrir_porte.addCondition(etre_proche_de_porte);
+		ouvrir_porte.addCondition(porte_est_deverouille);
 		ouvrir_porte.addCondition(porte_est_ferme);
+		ouvrir_porte.addAjoutes(porte_est_ouverte);
+		ouvrir_porte.addAjoutes(partie1_du_meuble_quelque_part);
+		ouvrir_porte.addAjoutes(partie2_du_meuble_quelque_part);
 		ouvrir_porte.addAjoutes(porte_est_ouverte);
 		ouvrir_porte.addDetruits(porte_est_ferme);
 		
-		Module chercher_clef = new Module(0,"pick_up_sprayer");
-		chercher_clef.addCondition(sprayer_somewhere);
-		chercher_clef.addCondition(hand_is_empty);
-		chercher_clef.addAjoutes(sprayer_in_hand);
-		chercher_clef.addDetruits(sprayer_somewhere);
-		chercher_clef.addDetruits(hand_is_empty);
+		Module fermer_porte = new Module(0, "fermer_porte");
+		fermer_porte.addCondition(etre_proche_de_porte);
+		fermer_porte.addCondition(porte_est_deverouille);
+		fermer_porte.addCondition(porte_est_ouverte);
+		fermer_porte.addAjoutes(porte_est_ferme);
+		fermer_porte.addDetruits(porte_est_ouverte);
+		fermer_porte.addDetruits(partie1_du_meuble_quelque_part);
+		fermer_porte.addDetruits(partie2_du_meuble_quelque_part);
+		//================================================
+		//===chercher
+		//================================================
+		Module chercher_cle = new Module(0, "chercher_cle");
+		chercher_cle.addCondition(clef_quelque_part);
+		chercher_cle.addAjoutes(etre_proche_de_la_clef);
 		
-		Module chercher_partie1 = new Module(0,"pick_up_sprayer");
-		chercher_partie1.addCondition(sprayer_somewhere);
-		chercher_partie1.addCondition(hand_is_empty);
-		chercher_partie1.addAjoutes(sprayer_in_hand);
-		chercher_partie1.addDetruits(sprayer_somewhere);
-		chercher_partie1.addDetruits(hand_is_empty);
+		Module chercher_outil = new Module(0, "chercher_outil");
+		chercher_outil.addCondition(outil_quelque_part);
+		chercher_outil.addAjoutes(etre_proche_de_outil);
 		
-		Module chercher_partie2 = new Module(0,"pick_up_sprayer");
-		chercher_partie2.addCondition(sprayer_somewhere);
-		chercher_partie2.addCondition(hand_is_empty);
-		chercher_partie2.addAjoutes(sprayer_in_hand);
-		chercher_partie2.addDetruits(sprayer_somewhere);
-		chercher_clef.addDetruits(hand_is_empty);
+		Module chercher_partie_1 = new Module(0, "chercher_partie_1");
+		chercher_partie_1.addCondition(partie1_du_meuble_quelque_part);
+		chercher_partie_1.addAjoutes(etre_proche_de_partie1);
 		
-		Module prendre_clef = new Module(0,"pick_up_sprayer");
-		prendre_clef.addCondition(sprayer_somewhere);
-		prendre_clef.addCondition(hand_is_empty);
-		prendre_clef.addAjoutes(sprayer_in_hand);
-		prendre_clef.addDetruits(sprayer_somewhere);
-		prendre_clef.addDetruits(hand_is_empty);
+		Module chercher_partie_2 = new Module(0, "chercher_partie_2");
+		chercher_partie_2.addCondition(partie2_du_meuble_quelque_part);
+		chercher_partie_2.addAjoutes(etre_proche_de_partie2);
 		
-		Module prendre_partie1 = new Module(0,"pick_up_sprayer");
-		prendre_clef.addCondition(sprayer_somewhere);
-		prendre_clef.addCondition(hand_is_empty);
-		prendre_clef.addAjoutes(sprayer_in_hand);
-		prendre_clef.addDetruits(sprayer_somewhere);
-		prendre_clef.addDetruits(hand_is_empty);
+		Module chercher_porte = new Module(0, "chercher_porte");
+		chercher_porte.addCondition(porte_quelque_part);
+		chercher_porte.addAjoutes(etre_proche_de_porte);
+		//================================================
+		//===assembler - desassembler
+		//================================================
+		Module assembler_meuble_1 = new Module(0, "assembler_meuble_1");
+		assembler_meuble_1.addCondition(etre_proche_de_partie1);
+		assembler_meuble_1.addCondition(meuble_non_assemble);
+		assembler_meuble_1.addCondition(partie2_du_meuble_dans_la_main);
+		assembler_meuble_1.addCondition(outil_dans_la_main);
+		assembler_meuble_1.addAjoutes(meuble_final_quelque_part);
+		assembler_meuble_1.addAjoutes(meuble_est_assemble);
+		assembler_meuble_1.addDetruits(partie2_du_meuble_dans_la_main);
+		assembler_meuble_1.addDetruits(etre_proche_de_partie1);
 		
-		Module prendre_partie2 = new Module(0,"pick_up_sprayer");
-		prendre_clef.addCondition(sprayer_somewhere);
-		prendre_clef.addCondition(hand_is_empty);
-		prendre_clef.addAjoutes(sprayer_in_hand);
-		prendre_clef.addDetruits(sprayer_somewhere);
-		prendre_clef.addDetruits(hand_is_empty);
+		Module assembler_meuble_2 = new Module(0, "assembler_meuble_2");
+		assembler_meuble_2.addCondition(etre_proche_de_partie2);
+		assembler_meuble_2.addCondition(meuble_non_assemble);
+		assembler_meuble_2.addCondition(partie1_du_meuble_dans_la_main);
+		assembler_meuble_2.addCondition(outil_dans_la_main);
+		assembler_meuble_2.addAjoutes(meuble_final_quelque_part);
+		assembler_meuble_2.addAjoutes(meuble_est_assemble);
+		assembler_meuble_2.addDetruits(partie1_du_meuble_dans_la_main);
+		assembler_meuble_2.addDetruits(etre_proche_de_partie2);
 		
-		Module aller_vers_clef = new Module(0,"pick_up_sprayer");
-		aller_vers_clef.addCondition(sprayer_somewhere);
-		aller_vers_clef.addCondition(hand_is_empty);
-		aller_vers_clef.addAjoutes(sprayer_in_hand);
-		aller_vers_clef.addDetruits(sprayer_somewhere);
-		aller_vers_clef.addDetruits(hand_is_empty);
+		Module desassembler_meuble_final = new Module(0, "desassembler_meuble_final");
+		desassembler_meuble_final.addCondition(etre_proche_de_meuble_final);
+		desassembler_meuble_final.addCondition(meuble_est_assemble);
+		desassembler_meuble_final.addCondition(outil_dans_la_main);
+		desassembler_meuble_final.addAjoutes(partie1_du_meuble_quelque_part);
+		desassembler_meuble_final.addAjoutes(partie2_du_meuble_quelque_part);
+		desassembler_meuble_final.addAjoutes(meuble_non_assemble);
+		desassembler_meuble_final.addAjoutes(etre_proche_de_partie1);
+		desassembler_meuble_final.addAjoutes(etre_proche_de_partie2);
+		desassembler_meuble_final.addDetruits(etre_proche_de_meuble_final);
 		
-		Module aller_vers_partie1 = new Module(0,"pick_up_sprayer");
-		aller_vers_partie1.addCondition(sprayer_somewhere);
-		aller_vers_partie1.addCondition(hand_is_empty);
-		aller_vers_partie1.addAjoutes(sprayer_in_hand);
-		aller_vers_partie1.addDetruits(sprayer_somewhere);
-		aller_vers_partie1.addDetruits(hand_is_empty);
-		
-		Module aller_vers_partie2 = new Module(0,"pick_up_sprayer");
-		aller_vers_partie2.addCondition(sprayer_somewhere);
-		aller_vers_partie2.addCondition(hand_is_empty);
-		aller_vers_partie2.addAjoutes(sprayer_in_hand);
-		aller_vers_partie2.addDetruits(sprayer_somewhere);
-		aller_vers_partie2.addDetruits(hand_is_empty);
-		
-		Module assembler_meuble = new Module(0,"pick_up_sprayer");
-		assembler_meuble.addCondition(sprayer_somewhere);
-		assembler_meuble.addCondition(hand_is_empty);
-		assembler_meuble.addAjoutes(sprayer_in_hand);
-		assembler_meuble.addDetruits(sprayer_somewhere);
-		assembler_meuble.addDetruits(hand_is_empty);
+		unAgent.addPropositionInitiale(clef_quelque_part);
+		unAgent.addPropositionInitiale(outil_quelque_part);
+		unAgent.addPropositionInitiale(partie1_du_meuble_quelque_part);
+		unAgent.addPropositionInitiale(partie1_du_meuble_quelque_part);
+		unAgent.addPropositionInitiale(porte_quelque_part);
 
+		unAgent.addBut(meuble_est_assemble);
+		unAgent.addBut(meuble_final_quelque_part);
 
-		
+		e.calculLinkBetweenModules();
+		//D�but de la simulation
+		//StatsCreator sc = new StatsCreator(e.getAllModules(),e.getAllTheta());
+		int cpt=0;
 
 		while(!unAgent.isDone()) {
+		//while (cpt < 50) {
 			System.out.println("\n\nTIME : " + e.time);
 			//unAgent.printState();
 			//Calcul des activations des modules
@@ -244,17 +339,18 @@ public class Main {
 			e.execute();
 			e.updateTheta();
 			e.time++;
+			cpt++;
 		}
 		System.out.println("\nLes missions ont été terminés en " + e.time );
-		sc.exportToExcel("test1.txt");
-		sc.exportToPng("Seuils4");
+		sc.exportToExcel("test2.txt");
+		sc.exportToPng("Seuils5");
 		
 		
 		
 	}
 
 	public static void main(String[] args) {
-		Maes();
+		scenario();
 
 	}
 
