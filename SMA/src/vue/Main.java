@@ -109,9 +109,7 @@ public class Main {
 		 
 		Agent a = new Agent();
 		a.addPropositionInitiale(hand_is_empty);
-		//a.addPropositionInitiale("hand_is_empty");
 
-		//a.addPropositionInitiale(hand_is_empty.toString()); //TODO : Decouvrir pourquoi deux mains font bugguer le programme. (au niveau de la propagation d'energy
 		a.addPropositionInitiale(sander_somewhere);
 		a.addPropositionInitiale(sprayer_somewhere);
 		a.addPropositionInitiale(operationnal);
@@ -124,7 +122,7 @@ public class Main {
 		//D�but de la simulation
 
 		while(!a.isDone()) {
-			System.out.println("TIME : " + Environnement.time);
+			System.out.println("TIME : " + e.time);
 			System.out.println(a.printState());
 			//Calcul des activations des modules
 			e.executable();
@@ -141,9 +139,10 @@ public class Main {
 			//Sinon diminution du seuil d'activation
 			e.updateTheta();
 			//e.afficherPropositions();
-			Environnement.time++;
+			e.time++;
 			System.out.println("");
 		}
+		System.out.println("\nLes missions ont été terminés en " + e.time );
 		
 	}
 

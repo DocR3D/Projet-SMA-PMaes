@@ -1,10 +1,6 @@
 package modele;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Set;
 
 
 // Alphabet : 
@@ -25,7 +21,7 @@ public class Environnement {
 
 	public static ArrayList<Proposition> listeDesProposition;
 
-	public static int time = 1;
+	public int time = 1;
 
 
 	public Environnement(float niveauActivationPI, float seuilActivationTHETA, float energieInjecteeSousButGAMMA,
@@ -158,16 +154,16 @@ public class Environnement {
 			for(Proposition uneProposition :  unModule.getDetruits())
 				if(!propositions.contains(uneProposition)) propositions.add(uneProposition);
 		}
-		for(int x = 0; x < this.listeModule.size(); x++)
-			for(int y = 0; y < this.listeModule.size(); y++) {
+		for(int x = 0; x < listeModule.size(); x++)
+			for(int y = 0; y < listeModule.size(); y++) {
 				if(x == y ) continue;
 				for( Proposition uneProposition : propositions) {
-					Module mx = this.listeModule.get(x);
-					Module my = this.listeModule.get(y);
+					Module mx = listeModule.get(x);
+					Module my = listeModule.get(y);
 					//En avant 
 					if(mx.containAjoutes(uneProposition) && uneProposition.isTrue() == false 
 							&& my.containCondition(uneProposition) ) {
-						if(!this.listeModuleActivable.contains(mx)) {
+						if(!listeModuleActivable.contains(mx)) {
 							System.out.println(mx + " donne " + (mx.getSeuilActivationALPHA()* energieInjecteePropositionVraiePHI/energieInjecteeSousButGAMMA * 1f/Environnement.M(uneProposition).size()*1f/my.getConditions().size())+ " d'énergie en AVANT vers " + my + " pour la proposition " + uneProposition);
 							my.spreadsForward += (mx.getSeuilActivationALPHA()* energieInjecteePropositionVraiePHI/energieInjecteeSousButGAMMA * 1f/Environnement.M(uneProposition).size()*1f/my.getConditions().size());
 						}
@@ -176,7 +172,7 @@ public class Environnement {
 					//En Arriere
 					//System.out.println(mx + " et " + my + " pour " + uneProposition + " est contenu dans mx ? " +mx.containCondition(uneProposition) + " est contenu dans my ? " + my.containAjoutes(uneProposition));
 					if(mx.containCondition(uneProposition) && my.containAjoutes(uneProposition) && uneProposition.isTrue() == false) {
-						if(!this.listeModuleActivable.contains(mx)) {
+						if(!listeModuleActivable.contains(mx)) {
 
 							System.out.println(mx + " donne " + mx.getSeuilActivationALPHA() * 1/Environnement.A(uneProposition).size()*1/my.getAjoutes().size() + " d'énergie en ARRIERE vers " + my + " pour la proposition " + uneProposition);
 							my.spreadsBackward += mx.getSeuilActivationALPHA() * 1/Environnement.A(uneProposition).size()*1/my.getAjoutes().size();
@@ -188,7 +184,7 @@ public class Environnement {
 							&& my.containDetruits(uneProposition)) {
 						if(mx.getSeuilActivationALPHA() <= my.getSeuilActivationALPHA() && Agent.S().contains(uneProposition) 
 								&& my.getConditions().contains(uneProposition) && mx.getDetruits().contains(uneProposition)) {
-								my.takesAway = 0;
+							my.takesAway = 0;
 						}else {
 
 							if(uneProposition.name.equals("hand_is_empty")) {
@@ -255,6 +251,6 @@ public class Environnement {
 			System.out.println(uneProposition.name + " : " + uneProposition.isTrue());
 	}
 	public void ajouterProposition(Proposition uneProposition) {
-		this.listeDesProposition.add(uneProposition);
+		listeDesProposition.add(uneProposition);
 	}
 }
