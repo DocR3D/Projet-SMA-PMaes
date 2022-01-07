@@ -169,7 +169,7 @@ public class Environnement {
 							&& my.containCondition(uneProposition) ) {
 						if(!this.listeModuleActivable.contains(mx)) {
 							System.out.println(mx + " donne " + (mx.getSeuilActivationALPHA()* energieInjecteePropositionVraiePHI/energieInjecteeSousButGAMMA * 1f/Environnement.M(uneProposition).size()*1f/my.getConditions().size())+ " d'énergie en AVANT vers " + my + " pour la proposition " + uneProposition);
-							my.spreadsForward += (mx.getSeuilActivationALPHA()*(time-1)* energieInjecteePropositionVraiePHI/energieInjecteeSousButGAMMA * 1f/Environnement.M(uneProposition).size()*1f/my.getConditions().size());
+							my.spreadsForward += (mx.getSeuilActivationALPHA()* energieInjecteePropositionVraiePHI/energieInjecteeSousButGAMMA * 1f/Environnement.M(uneProposition).size()*1f/my.getConditions().size());
 						}
 					}
 
@@ -178,15 +178,15 @@ public class Environnement {
 					if(mx.containCondition(uneProposition) && my.containAjoutes(uneProposition) && uneProposition.isTrue() == false) {
 						if(!this.listeModuleActivable.contains(mx)) {
 
-							System.out.println(mx + " donne " + mx.getSeuilActivationALPHA()*(time-1) * 1/Environnement.A(uneProposition).size()*1/my.getAjoutes().size() + " d'énergie en ARRIERE vers " + my + " pour la proposition " + uneProposition);
-							my.spreadsBackward += mx.getSeuilActivationALPHA()*(time-1) * 1/Environnement.A(uneProposition).size()*1/my.getAjoutes().size();
+							System.out.println(mx + " donne " + mx.getSeuilActivationALPHA() * 1/Environnement.A(uneProposition).size()*1/my.getAjoutes().size() + " d'énergie en ARRIERE vers " + my + " pour la proposition " + uneProposition);
+							my.spreadsBackward += mx.getSeuilActivationALPHA() * 1/Environnement.A(uneProposition).size()*1/my.getAjoutes().size();
 						}
 					}
 
 					//Decay
 					if(mx.containCondition(uneProposition) && uneProposition.isTrue() == true 
 							&& my.containDetruits(uneProposition)) {
-						if(mx.getSeuilActivationALPHA()*(time-1) <= my.getSeuilActivationALPHA()*(time-1) && Agent.S().contains(uneProposition) 
+						if(mx.getSeuilActivationALPHA() <= my.getSeuilActivationALPHA() && Agent.S().contains(uneProposition) 
 								&& my.getConditions().contains(uneProposition) && mx.getDetruits().contains(uneProposition)) {
 								my.takesAway = 0;
 						}else {
@@ -196,7 +196,7 @@ public class Environnement {
 								//System.out.println( mx.getSeuilActivationALPHA()*(time-1)+ " < " + my.getSeuilActivationALPHA()*(time-1) +" et " + Agent.S().contains(uneProposition) +my.getConditions().contains(uneProposition) + mx.getDetruits().contains(uneProposition)  +"\n\n\n\n");
 								//continue; //TODO j'ai triché ici 
 							}
-							float max = mx.getSeuilActivationALPHA()*(time-1)*energiePriseButProtegeDELTA/energieInjecteeSousButGAMMA*1f/(Environnement.U(uneProposition).size())*1f/my.getDetruits().size(); 
+							float max = mx.getSeuilActivationALPHA()*energiePriseButProtegeDELTA/energieInjecteeSousButGAMMA*1f/(Environnement.U(uneProposition).size())*1f/my.getDetruits().size(); 
 							//System.out.println( mx.getSeuilActivationALPHA()*(time-1)*energiePriseButProtegeDELTA/energieInjecteeSousButGAMMA*1f/(Environnement.U(uneProposition).size())*1f/my.getDetruits().keySet().size());
 
 							if( max < 0 ) { // TODO J'ai triché aussi ici ! 

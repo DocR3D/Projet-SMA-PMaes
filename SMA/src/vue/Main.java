@@ -123,7 +123,7 @@ public class Main {
 		e.calculLinkBetweenModules();
 		//D�but de la simulation
 
-		while(e.time < 4 && !a.isDone()) {
+		while(!a.isDone()) {
 			System.out.println("TIME : " + Environnement.time);
 			System.out.println(a.printState());
 			//Calcul des activations des modules
