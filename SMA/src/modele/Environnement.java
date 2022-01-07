@@ -102,7 +102,6 @@ public class Environnement {
 
 	//Si rien n'a été éxécuté, on met à jours theta
 	public void updateTheta() {
-		updateStatsProposition();
 		if(listeModuleActivable.size() == 0) {
 			this.seuilActivationTHETA = this.seuilActivationTHETA - this.seuilActivationTHETA/10; // On retire 10 pourcents
 			System.out.println("L'environnement diminue Theta de 10%, Theta = " + this.seuilActivationTHETA);
@@ -111,6 +110,8 @@ public class Environnement {
 			this.seuilActivationTHETA = this.defaultSeuilActivationTHETA;
 		}
 		this.allTheTheta.add(this.seuilActivationTHETA);
+		updateStatsProposition();
+
 	}
 	public void updateEnergyStateGoalAndGoalDone(boolean afficherInformation) {
 		for(Proposition uneProposition : unAgent.S()) {

@@ -7,7 +7,7 @@ public class Proposition {
 	String name;
 	boolean value;
 	int nbOccurence = 1;
-	private ArrayList<Integer> whenIsEnable;
+	private ArrayList<Integer> whenIsEnable = new ArrayList<Integer>();
 
 
 	public Proposition(String name, boolean value) {
@@ -16,7 +16,6 @@ public class Proposition {
 		this.value = value;
 		this.nbOccurence = value ? 1 : 0;
 		Environnement.listeDesProposition.add(this);
-		whenIsEnable = new ArrayList<Integer>();
 	}
 
 	public Proposition(String name, boolean value, int nbOccurence) {
@@ -40,7 +39,6 @@ public class Proposition {
 		if(nbOccurence == 0) {
 			nbOccurence++;
 			value = true;
-			whenIsEnable.add(1);
 		}
 		else nbOccurence++;
 		}
