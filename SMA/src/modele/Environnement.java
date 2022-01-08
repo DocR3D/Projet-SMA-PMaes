@@ -8,8 +8,8 @@ import java.util.ArrayList;
 //
 public class Environnement {
 
+	//Liste des parametres de l'envionnement
 	private float defaultSeuilActivationTHETA;
-
 	private float niveauActivationPI;
 	private float seuilActivationTHETA;
 	private float energieInjecteeSousButGAMMA;
@@ -24,7 +24,8 @@ public class Environnement {
 	public int time = 1;
 
 	private Agent unAgent;
-	
+
+	//Liste contenant tout les seuils d'activation du programme
 	private ArrayList<Float> allTheTheta;
 
 	public Environnement(float niveauActivationPI, float seuilActivationTHETA, float energieInjecteeSousButGAMMA,
@@ -41,7 +42,7 @@ public class Environnement {
 		this.unAgent = a;
 		allTheTheta = new ArrayList<Float>();
 		allTheTheta.add(seuilActivationTHETA);
-		
+
 
 	}
 
@@ -49,6 +50,7 @@ public class Environnement {
 		listeModule.add(unModule);
 	}
 
+	//Active le module qui a le seuil le plus élevé et dont toute les conditions prérequise sont à true
 	public void executable() {
 		Environnement.listeModuleActivable = new ArrayList<>();
 		for(Module unModule: listeModule) {
@@ -58,6 +60,7 @@ public class Environnement {
 		}
 	}
 
+	//Calcul tout les liens entre les modules, c'est à dire les successeurs, predecesseurs et conflit d'un module pour tout les modules
 	public void calculLinkBetweenModules() {
 		for(Module unModuleAModifier : listeModule)
 			for(Module unModuleAVerifier: listeModule) {
@@ -71,6 +74,7 @@ public class Environnement {
 			}
 	}
 
+	//Renvoie la liste de tout les modules qui contient une proposition comme condition
 	public static ArrayList<Module> M(Proposition uneProposition){
 		ArrayList<Module> result = new ArrayList<>();
 		for(Module unModule : listeModule) {
@@ -80,6 +84,8 @@ public class Environnement {
 		if(result.size() == 0) return null;
 		return result;
 	}
+
+	//Renvoie la liste de tout les modules qui contient une proposition comme ajouts
 	public static  ArrayList<Module> A(Proposition uneProposition){
 		ArrayList<Module> result = new ArrayList<>();
 		for(Module unModule : listeModule) {
@@ -90,6 +96,7 @@ public class Environnement {
 		return result;
 	}
 
+	//Renvoie la liste de tout les modules qui contient une proposition comme détruit
 	public static  ArrayList<Module> U(Proposition uneProposition){
 		ArrayList<Module> result = new ArrayList<>();
 		for(Module unModule : listeModule) {
@@ -100,7 +107,7 @@ public class Environnement {
 		return result;
 	}
 
-	//Si rien n'a été éxécuté, on met à jours theta
+	//Met à jours le seuil d'activation, on le réduit de 10% si rien n'a été éxécuté et on le remet à sa valeur par défaut sinon
 	public void updateTheta() {
 		if(listeModuleActivable.size() == 0) {
 			this.seuilActivationTHETA = this.seuilActivationTHETA - this.seuilActivationTHETA/10; // On retire 10 pourcents
@@ -113,13 +120,15 @@ public class Environnement {
 		updateStatsProposition();
 
 	}
+
+	//Met à jours les variables d'énergy temporaire selon les buts et l'environnement et selon les formules mathématique
 	public void updateEnergyStateGoalAndGoalDone(boolean afficherInformation) {
 		for(Proposition uneProposition : unAgent.S()) {
 			if(Environnement.M(uneProposition) != null)
 
 				for(Module unModule : Environnement.M(uneProposition)) {
 					if(afficherInformation) System.out.println("L'environnement donne à " + unModule + " une valeur d'énergie égal à " + (energieInjecteePropositionVraiePHI* 1/Environnement.M(uneProposition).size() * 1/unModule.getSizeCondition()));
-					unModule.inputFromState += energieInjecteePropositionVraiePHI * 1/Environnement.M(uneProposition).size() * 1/unModule.getSizeCondition();
+					unModule.recuDepuisEnvironnement += energieInjecteePropositionVraiePHI * 1/Environnement.M(uneProposition).size() * 1/unModule.getSizeCondition();
 				}
 		}
 		for(Proposition uneProposition : unAgent.G()) {
@@ -127,7 +136,7 @@ public class Environnement {
 
 				for(Module unModule : Environnement.A(uneProposition)) {
 					if(afficherInformation) System.out.println("Les buts donnent à " + unModule + " une valeur d'énergie égal à " + energieInjecteeSousButGAMMA * 1/Environnement.A(uneProposition).size() * 1.00f/unModule.getSizeAjoutes());
-					unModule.inputFromGoals += energieInjecteeSousButGAMMA * 1/Environnement.A(uneProposition).size() * 1.00f/unModule.getSizeAjoutes();
+					unModule.recuDepuisObjectif += energieInjecteeSousButGAMMA * 1/Environnement.A(uneProposition).size() * 1.00f/unModule.getSizeAjoutes();
 
 				}
 		}
@@ -135,16 +144,17 @@ public class Environnement {
 			if(Environnement.U(uneProposition) != null)
 				for(Module unModule : Environnement.U(uneProposition)) {
 					if(afficherInformation) System.out.println("Les buts accomplit retirent à " + unModule + " une valeur d'énergie égal à " + (energiePriseButProtegeDELTA/Environnement.U(uneProposition).size() + 1/unModule.getNumberTrueDetruits() ));
-					unModule.takenAwayByProtectedGoals = energiePriseButProtegeDELTA/Environnement.U(uneProposition).size() + 1/unModule.getNumberTrueDetruits();
+					unModule.reduitParObjectifProtege = energiePriseButProtegeDELTA/Environnement.U(uneProposition).size() + 1/unModule.getNumberTrueDetruits();
 
 				}
 		}
 
 	}
 
+	//Met à jours les variables temporaires d'energy selon les successeurs et predecesseurs et conflit et selon les formules mathématiques
 	public void updateEnergyPropagation(boolean afficherInformation) {
 		System.out.println();
-		
+
 		for(int x = 0; x < listeModule.size(); x++)
 			for(int y = 0; y < listeModule.size(); y++) {
 				if(x == y ) continue;
@@ -156,7 +166,7 @@ public class Environnement {
 							&& my.containCondition(uneProposition) ) {
 						if(!listeModuleActivable.contains(mx)) {
 							if(afficherInformation) System.out.println(mx + " donne " + (mx.getSeuilActivationALPHA()* energieInjecteePropositionVraiePHI/energieInjecteeSousButGAMMA * 1f/Environnement.M(uneProposition).size()*1f/my.getConditions().size())+ " d'énergie en AVANT vers " + my + " pour la proposition " + uneProposition);
-							my.spreadsForward += (mx.getSeuilActivationALPHA()* energieInjecteePropositionVraiePHI/energieInjecteeSousButGAMMA * 1f/Environnement.M(uneProposition).size()*1f/my.getConditions().size());
+							my.recuDepuisDevant += (mx.getSeuilActivationALPHA()* energieInjecteePropositionVraiePHI/energieInjecteeSousButGAMMA * 1f/Environnement.M(uneProposition).size()*1f/my.getConditions().size());
 						}
 					}
 
@@ -166,7 +176,7 @@ public class Environnement {
 						if(!listeModuleActivable.contains(mx)) {
 
 							if(afficherInformation) System.out.println(mx + " donne " + mx.getSeuilActivationALPHA() * 1/Environnement.A(uneProposition).size()*1/my.getAjoutes().size() + " d'énergie en ARRIERE vers " + my + " pour la proposition " + uneProposition);
-							my.spreadsBackward += mx.getSeuilActivationALPHA() * 1/Environnement.A(uneProposition).size()*1/my.getAjoutes().size();
+							my.recuDepuisDerriere += mx.getSeuilActivationALPHA() * 1/Environnement.A(uneProposition).size()*1/my.getAjoutes().size();
 						}
 					}
 
@@ -194,7 +204,8 @@ public class Environnement {
 			}
 
 	}
-	
+
+	//Execute un module à executer
 	public void execute() {
 		Module executableModule = getModuleToExecute();
 		if(executableModule != null) {
@@ -204,7 +215,7 @@ public class Environnement {
 		}
 	}
 
-
+	//Appelle toute les fonctions de mise à jours d'energy et empeches l'energy de monter trop haut grâce à la formule mathématique du sujet
 	public void updateEnergy(boolean afficherInformation) {
 		updateEnergyStateGoalAndGoalDone(afficherInformation);
 		updateEnergyPropagation(afficherInformation);
@@ -221,8 +232,8 @@ public class Environnement {
 				unModule.setSeuilActivationALPHA(factor * unModule.getSeuilActivationALPHA());
 			}
 		}
-		
-		
+
+
 	}
 	public ArrayList<Module> getAllModules(){
 		return listeModule;
@@ -250,13 +261,13 @@ public class Environnement {
 	public void ajouterProposition(Proposition uneProposition) {
 		listeDesProposition.add(uneProposition);
 	}
-	
+
 	public void updateStatsProposition() {
 		for(Proposition uneProposition : listeDesProposition) {
 			uneProposition.addEtat();
 		}
 	}
-	
+
 	public ArrayList<Float> getAllTheta() {
 		return this.allTheTheta;
 	}

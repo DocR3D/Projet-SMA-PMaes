@@ -42,6 +42,7 @@ public class StatsCreator {
 		this.listeModulesSurGraph.add(unModule);
 	}
 
+	//Fonction permettant de creer un document qui contient tout les seuils d'activation trié par module
 	public void exportToExcel(String nomDuFichier){
 		File file = new File(CHEMIN + nomDuFichier);
 
@@ -78,6 +79,7 @@ public class StatsCreator {
 		}
 	}
 
+	//Fonction permettant de créer un document photo qui contient tout les seuils d'activation trié par module
 	public void exportToPng(String nomDuFichier) {
 		final XYChart chart = new XYChartBuilder().width(600).height(400).title("Seuils des modules").xAxisTitle("L'itération").yAxisTitle("Le seuil").build();
 		for(Module unModule : this.listeModulesSurGraph) {
@@ -93,14 +95,15 @@ public class StatsCreator {
 		}
 
 	}
-	
+
+	//Fonction permettant de créer un document photo contenant tout les changement d'état d'une proposition 
 	public void exportConditionEtat(String nomDuFichier) {
 		final XYChart chart = new XYChartBuilder().width(600).height(400).title("Seuils des modules").xAxisTitle("L'itération").yAxisTitle("Le seuil").build();
 		for(Proposition uneProposition : Environnement.listeDesProposition) {
 			chart.addSeries(uneProposition.toString(), uneProposition.getEtatStat());
 		}
 		try {
-			BitmapEncoder.saveBitmapWithDPI(chart, CHEMIN + nomDuFichier, BitmapFormat.PNG, 600);
+			BitmapEncoder.saveBitmapWithDPI(chart, CHEMIN + nomDuFichier, BitmapFormat.PNG, 300);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

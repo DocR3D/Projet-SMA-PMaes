@@ -6,8 +6,12 @@ public class Proposition {
 
 	String name;
 	boolean value;
+
+	//Variables permettant de gérer les scénarios ou on a plusieurs fois la même condition, ex : HAND_IS_EMPTY dans Maes
 	int defaultNbOccurence = 1;
 	int nbOccurence = 1;
+
+	//Liste permettant de connaitre quand les propositions sont passé à True et à False
 	private ArrayList<Integer> whenIsEnable = new ArrayList<Integer>();
 
 
@@ -28,6 +32,7 @@ public class Proposition {
 		Environnement.listeDesProposition.add(this);
 	}
 
+	//Met à jours la proposition à false, uniquement dans le cas ou le nombre d'occurence est égale à 1
 	public void setFalse() {
 		if(nbOccurence == 1) {
 			value = false;
@@ -36,6 +41,7 @@ public class Proposition {
 
 	}
 
+	//Met à jours la proposition à True si elle ne l'était pas déjà.
 	public void setTrue() {
 		if(nbOccurence == 0) {
 			nbOccurence++;

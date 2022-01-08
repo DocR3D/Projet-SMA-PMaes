@@ -4,26 +4,36 @@ import java.util.ArrayList;
 
 public class Module {
 
+	//Liste de condition pour activer le module
 	private ArrayList<Proposition> conditions;
+	//Liste de condition qui seront à vraie apres avoir activé le module
 	private ArrayList<Proposition> ajoutes;
+	//Liste de condition qui seront à faux apres avoir activé le module
 	private ArrayList<Proposition> detruits;
 
+	//Liste des modules à faire avant de faire celui la
 	private ArrayList<Module> pred;
+	//Liste des modules qui seront faisable apres avoir fait celui la
 	private ArrayList<Module> succ;
+	//Liste des modules qui ne seront plus faisable apres avoir activer ce module
 	private ArrayList<Module> conf;
-	
+
+	//Liste contenant tout les seuils du module au cours du programme
 	public ArrayList<Float> oldStats;
 
+	//Premiere valeur pour le seuil d'activation du module
 	private float seuilActivationALPHA;
-	public float takenAwayByProtectedGoals = 0;
+
+	//variables permettant de stocker temporairement l'energy à recevoir
+	public float reduitParObjectifProtege = 0;
 	public float takesAway = 0;
-	public float inputFromGoals = 0;
-	public float inputFromState = 0;
-	public float spreadsBackward = 0;
-	public float spreadsForward = 0;
+	public float recuDepuisObjectif = 0;
+	public float recuDepuisEnvironnement = 0;
+	public float recuDepuisDerriere = 0;
+	public float recuDepuisDevant = 0;
 
 	private String nom;
-	
+
 	public Module(float seuilActivationALPHA,String nom) {
 		super();
 		this.seuilActivationALPHA = seuilActivationALPHA;
@@ -44,6 +54,8 @@ public class Module {
 		Environnement.addModuleToListModule(this);
 	}
 
+	//Fonction permettant d'activer un module
+	//Il met à jours toute les propositions en fonction des siennes
 	public void activateModule() {
 		System.out.println("le module " + this + " est active");
 
@@ -162,7 +174,7 @@ public class Module {
 	public float getSeuilActivationALPHA() {
 		return seuilActivationALPHA;
 	}
-	
+
 	public ArrayList<Float> getOldStats(){
 		return this.oldStats;
 	}
@@ -171,25 +183,26 @@ public class Module {
 		this.seuilActivationALPHA = seuilActivationALPHA;
 	}
 
+	//Fonction mettant à jours le seuil du module selon les variables temporaires
 	public void updateSeuil() {
 		float futurSeuil = this.seuilActivationALPHA;
-		futurSeuil += inputFromState;
-		futurSeuil += inputFromGoals;
+		futurSeuil += recuDepuisEnvironnement;
+		futurSeuil += recuDepuisObjectif;
 
-		futurSeuil -= this.takenAwayByProtectedGoals;
+		futurSeuil -= this.reduitParObjectifProtege;
 		if(futurSeuil < 0) futurSeuil = 0;
 		futurSeuil -= this.takesAway;
 		if(futurSeuil < 0) futurSeuil = 0;
 
-		futurSeuil += spreadsBackward;
-		futurSeuil += spreadsForward;
+		futurSeuil += recuDepuisDerriere;
+		futurSeuil += recuDepuisDevant;
 		this.setSeuilActivationALPHA(futurSeuil);
 
-		this.inputFromGoals = 0;
-		this.inputFromState = 0;
-		this.spreadsBackward = 0;
-		this.spreadsForward = 0;
-		this.takenAwayByProtectedGoals = 0;
+		this.recuDepuisObjectif = 0;
+		this.recuDepuisEnvironnement = 0;
+		this.recuDepuisDerriere = 0;
+		this.recuDepuisDevant = 0;
+		this.reduitParObjectifProtege = 0;
 		this.takesAway = 0;
 		oldStats.add(seuilActivationALPHA);
 	}
