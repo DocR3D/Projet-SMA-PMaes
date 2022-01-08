@@ -232,9 +232,8 @@ public class Environnement {
 				unModule.setSeuilActivationALPHA(factor * unModule.getSeuilActivationALPHA());
 			}
 		}
-
-
 	}
+	
 	public ArrayList<Module> getAllModules(){
 		return listeModule;
 	}

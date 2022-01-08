@@ -1,7 +1,5 @@
 package vue;
 
-import java.util.Random;
-
 import modele.Agent;
 import modele.Environnement;
 import modele.Module;

@@ -1,6 +1,5 @@
 package vue;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -35,6 +34,10 @@ public class StatsCreator {
 		super();
 		this.listeModulesSurGraph = lesModules;
 		this.seuil = Seuil;
+		File file = new File(CHEMIN);
+		if(!file.exists()) {
+			file.mkdir();
+		}
 	}
 
 
