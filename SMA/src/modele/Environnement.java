@@ -50,7 +50,7 @@ public class Environnement {
 		listeModule.add(unModule);
 	}
 
-	//Active le module qui a le seuil le plus élevé et dont toute les conditions prérequise sont à true
+	//Rempli la liste des modules activables selon si le seuil est superieur au minimum et si toute les préconditions sont validé
 	public void executable() {
 		Environnement.listeModuleActivable = new ArrayList<>();
 		for(Module unModule: listeModule) {

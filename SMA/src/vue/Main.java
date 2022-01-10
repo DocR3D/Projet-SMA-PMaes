@@ -312,14 +312,14 @@ public class Main {
 		while(!unAgent.isDone()) {
 			//while (cpt < 50) {
 			System.out.println("\n\nTIME : " + e.time);
-			//unAgent.printState();
+			unAgent.printState();
 			//Calcul des activations des modules
 			e.executable();
 			// Diffusion d'énergie d'activation
 
-			e.updateEnergy(false);
+			e.updateEnergy(true);
 
-			//e.afficherEtatActivation();
+			e.afficherEtatActivation();
 
 			//Si executable, Execution d'un module
 			e.execute();
