@@ -11,11 +11,11 @@ public class Main {
 	static Environnement e;
 	static StatsCreator sc;
 
-	public static void Maes() {
+	public static void Maes(float niveauActivationPI,float seuilActivationTHETA, float energieInjecteeSousButGAMMA, float energieInjecteePropositionVraiePHI, float energiePriseButProtegeDELTA) {
 		// Initialisation
 		unAgent = new Agent();
 
-		float niveauActivationPI = 100, seuilActivationTHETA=20,  energieInjecteeSousButGAMMA = 80,  energieInjecteePropositionVraiePHI = 5, energiePriseButProtegeDELTA = 50;
+		//float niveauActivationPI = 20, seuilActivationTHETA=45,  energieInjecteeSousButGAMMA = 70,  energieInjecteePropositionVraiePHI = 20, energiePriseButProtegeDELTA = 50;
 		e = new Environnement(niveauActivationPI, seuilActivationTHETA, energieInjecteeSousButGAMMA, energieInjecteePropositionVraiePHI, energiePriseButProtegeDELTA,unAgent);
 
 		Proposition sprayer_somewhere = new Proposition("sprayer_somewhere", true);
@@ -109,9 +109,9 @@ public class Main {
 
 	}
 
-	public static void scenario() {
+	public static void scenario(float niveauActivationPI,float seuilActivationTHETA, float energieInjecteeSousButGAMMA, float energieInjecteePropositionVraiePHI, float energiePriseButProtegeDELTA) {
 
-		float niveauActivationPI = 100, seuilActivationTHETA=20,  energieInjecteeSousButGAMMA = 80,  energieInjecteePropositionVraiePHI = 5, energiePriseButProtegeDELTA = 50;
+		//float niveauActivationPI = 100, seuilActivationTHETA=20,  energieInjecteeSousButGAMMA = 80,  energieInjecteePropositionVraiePHI = 5, energiePriseButProtegeDELTA = 50;
 		unAgent = new Agent();
 
 		e = new Environnement(niveauActivationPI, seuilActivationTHETA, energieInjecteeSousButGAMMA, energieInjecteePropositionVraiePHI, energiePriseButProtegeDELTA,unAgent);
@@ -307,9 +307,10 @@ public class Main {
 
 
 	public static void main(String[] args) {
-		Maes();
-		//scenario();
-		while(!unAgent.isDone()) {
+		if(Integer.parseInt(args[0]) == 1)
+			scenario(Float.parseFloat(args[1]),Float.parseFloat(args[2]),Float.parseFloat(args[3]),Float.parseFloat(args[4]),Float.parseFloat(args[5]));
+		else Maes(Float.parseFloat(args[1]),Float.parseFloat(args[2]),Float.parseFloat(args[3]),Float.parseFloat(args[4]),Float.parseFloat(args[5]));
+		while(!unAgent.isDone() ) {
 			//while (cpt < 50) {
 			System.out.println("\n\nTIME : " + e.time);
 			unAgent.printState();
